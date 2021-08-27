@@ -21,3 +21,9 @@ jobs:
           TEST_PYPI_TOKEN: xxx
         if: env.GITHUB_REPOSITORY  == 'dbarbier/test-gh-actions' && env.TEST_PYPI_TOKEN != ''
         run: echo Ok
+
+      - name: Test env context 2
+        env:
+          TEST_PYPI_TOKEN: xxx
+        if:  env.TEST_PYPI_TOKEN != '' && env.GITHUB_REPOSITORY  == 'dbarbier/test-gh-actions'
+        run: echo Ok
