@@ -50,12 +50,14 @@ jobs:
           sudo tlmgr install import nomencl rsfs
 
       - name: Configure CMake
+        shell: bash
         run: cmake -S .  -B build
 
       - name: Build docs
+        shell: bash
         run: |
           cmake --build build -t pdf
-          Get-Content -Path .\build\main.log
+          cat build/main.log
 
       - name: Test PDF
         shell: bash
