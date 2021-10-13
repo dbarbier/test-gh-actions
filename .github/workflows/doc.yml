@@ -27,8 +27,8 @@ jobs:
           choco install -y --no-progress miktex --params '"/Set:essential /Mirror:https://ctan.math.illinois.edu/systems/win32/miktex/tm/packages/"'
           echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           $env:Path += ";C:/Program Files/MiKTeX/miktex/bin/x64/"
-          initexmf --disable-installer
-          mpm --verbose --admin --install=geometry,graphicx,import,amsmath,bm,amsfonts,rsfs,hyperref
+          initexmf --set-config-value=[MPM]AutoInstall=f
+          mpm --verbose --install=geometry,graphicx,import,amsmath,bm,amsfonts,rsfs,hyperref
 
       - name: debug
         if: startsWith(matrix.os, 'windows')
