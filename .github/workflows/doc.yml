@@ -21,10 +21,9 @@ jobs:
       - name: Install dependencies on windows
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
-        # mpm --verbose --admin --install=geometry,import,nomencl
         run: |
           choco install -y --no-progress cmake
-          choco install -y --no-progress miktex --params '"/Set:essential /Mirror:https://ctan.math.illinois.edu/systems/win32/miktex/tm/packages/"'
+          choco install -y --no-progress miktex --params '"/Set:essential /ThisUser /Mirror:https://ctan.math.illinois.edu/systems/win32/miktex/tm/packages/"'
           echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           $env:Path += ";C:/Program Files/MiKTeX/miktex/bin/x64/"
           initexmf --set-config-value="[MPM]AutoInstall=f"
@@ -55,9 +54,7 @@ jobs:
       - name: Build docs
         shell: bash
         run: |
-          cat build/main_pdf.vcxproj
-          cmake --build build -t pdf
-          ls build
+          cmake --build build -t pdf || ls build
           cat build/main.log
 
       - name: Test PDF
