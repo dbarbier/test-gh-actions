@@ -27,7 +27,7 @@ jobs:
           echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           $env:Path += ";C:/Program Files/MiKTeX/miktex/bin/x64/"
           initexmf --admin --verbose --set-config-value='[MPM]AutoInstall=1'
-          C:/Program Files/MiKTeX/miktex/bin/x64/mpm --update
+          # "C:/Program Files/MiKTeX/miktex/bin/x64/mpm" --update
           # mpm --install=import,nomencl
 
       - name: Install dependencies on ubuntu
@@ -52,3 +52,11 @@ jobs:
 
       - name: Build docs
         run: cmake --build build -t pdf
+
+      - name: Install extra LaTeX packages on windows
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run: |
+          "C:/Program Files/MiKTeX/miktex/bin/x64/mpm.exe" --update
+          mpm --install=import,nomencl
+
