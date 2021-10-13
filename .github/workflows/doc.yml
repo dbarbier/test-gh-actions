@@ -27,6 +27,14 @@ jobs:
           echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           $env:Path += ";C:/Program Files/MiKTeX/miktex/bin/x64/"
           Get-ChildItem -Path "C:/Program Files/MiKTeX/miktex/bin/x64/"
+          mpm.exe --update
+          mpm --update
+
+      - name: Install extra LaTeX packages on windows
+        shell: bash
+        run: |
+          mpm --update
+          mpm --install=geometry,import,nomencl
 
       - name: Install dependencies on ubuntu
         if: startsWith(matrix.os, 'ubuntu')
@@ -52,11 +60,3 @@ jobs:
       - name: Build docs
         shell: bash
         run: cmake --build build -t pdf
-
-      - name: Install extra LaTeX packages on windows
-        if: always()
-        shell: pwsh
-        run: |
-          "C:\Program Files\MiKTeX\miktex\bin\x64\mpm.exe" --update
-          mpm --install=import,nomencl
-
