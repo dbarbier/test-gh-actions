@@ -1,0 +1,52 @@
+name: Build documentation
+
+on:
+  push:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest,macos-latest,ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Install dependencies on windows
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run: |
+          choco install cmake
+          choco install miktex --params '"/Set:essential"'
+          echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          mpm --update
+          mpm --install=import,nomencl
+
+      - name: Install dependencies on ubuntu
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          sudo apt update
+          sudo apt install -y cmake texlive-latex-recommended texlive-latex-extra
+
+      - name: Install dependencies on macos
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          brew install cmake ninja
+          brew install --cask basictex
+          echo "/Library/TeX/texbin/" >> $GITHUB_PATH
+          export PATH="/Library/TeX/texbin/:$PATH"
+          sudo tlmgr update --self
+          # Add missing LaTeX packages
+          sudo tlmgr install import nomencl rsfs
+
+      - name: Configure CMake
+        run: cmake -S .  -B build
+
+      - name: Build docs
+        run: cmake --build build -t pdf

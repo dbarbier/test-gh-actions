@@ -1,0 +1,23 @@
+\documentclass[a4paper]{report}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{import}
+\usepackage{amsmath, bm, amsfonts}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage{subfig}
+\usepackage[colorlinks]{hyperref}
+
+\usepackage{nomencl}
+\makenomenclature
+
+\begin{document}
+
+\import{./}{nomenclature}
+
+\printnomenclature
+
+\chapter{ch1}
+
+\import{./}{bibliography}
+
+\end{document}
