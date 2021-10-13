@@ -57,3 +57,7 @@ jobs:
 
       - name: Build docs
         run: cmake --build build -t pdf
+
+      - name: Test PDF
+        shell: bash
+        run: cmake -E copy build/main.pdf new.pdf
