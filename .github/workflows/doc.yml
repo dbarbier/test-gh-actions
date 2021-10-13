@@ -26,7 +26,7 @@ jobs:
           choco install -y --no-progress miktex --params '"/Set:essential"'
           echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           $env:Path += ";C:/Program Files/MiKTeX/miktex/bin/x64/"
-          initexmf --admin --verbose --set-config-value='[MPM]AutoInstall=1'
+          # initexmf --admin --verbose --set-config-value='[MPM]AutoInstall=1'
           dir "C:/Program Files/MiKTeX/miktex/bin/x64/"
           # "C:/Program Files/MiKTeX/miktex/bin/x64/mpm" --update
           # mpm --install=import,nomencl
