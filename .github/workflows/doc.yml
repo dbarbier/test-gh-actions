@@ -55,7 +55,7 @@ jobs:
       - name: Build docs
         shell: bash
         run: |
-          cmake --build build -t pdf || ls build
+          cmake --build build -t pdf || ls build build/x64
           cat build/main.log
 
       - name: Test PDF
