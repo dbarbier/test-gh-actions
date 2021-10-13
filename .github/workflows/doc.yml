@@ -26,8 +26,7 @@ jobs:
           choco install -y --no-progress miktex --params '"/Set:essential"'
           echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           $env:Path += ";C:/Program Files/MiKTeX/miktex/bin/x64/"
-          mpm --update
-          mpm --install=geometry,import,nomencl
+          mpm --verbose --admin --install=geometry,import,nomencl
 
       - name: Install dependencies on ubuntu
         if: startsWith(matrix.os, 'ubuntu')
