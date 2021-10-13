@@ -29,7 +29,7 @@ jobs:
           $env:Path += ";C:/Program Files/MiKTeX/miktex/bin/x64/"
           initexmf --set-config-value="[MPM]AutoInstall=f"
           mpm --update-db
-          mpm --install=geometry,graphics,import,amsmath,bm,amsfonts,rsfs,hyperref
+          mpm --require=geometry,graphics,import,amsmath,amsfonts,rsfs,hyperref
           Get-Content -Path "C:\Users\runneradmin\AppData\Local\MiKTeX\miktex\log\mpmcli.log"
 
       - name: Install dependencies on ubuntu
