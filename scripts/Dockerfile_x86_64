@@ -1,0 +1,9 @@
+ARG BASE_IMAGE=foo-deps
+
+FROM $BASE_IMAGE as build
+
+RUN mkdir /workdir
+COPY . /workdir
+WORKDIR /workdir
+
+RUN scripts/build.sh

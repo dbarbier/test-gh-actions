@@ -10,6 +10,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Build
-        run:
-          env | grep GITHUB_ | sort
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache docker deps image
+        uses: actions/cache@v2
+        id: cache-deps
+        with:
+          path: /tmp/docker/foo-deps.tar
+          key: docker-${{ runner.os }}-${{ hashFiles('scripts/Dockerfile_x86_64_deps') }}
+
+      - name: Load or build docker deps image
+        run: |
+          if test -f /tmp/docker/foo-deps.tar; then
+              docker image load -i /tmp/docker/foo-deps.tar
+          else
+              docker build -f scripts/Dockerfile_x86_64_deps -t foo-deps .
+              mkdir -p /tmp/docker
+              docker image save -o /tmp/docker/foo-deps.tar foo-deps
+          fi
+          docker images
+
+      - name: Cache .ccache directory
+        uses: actions/cache@v2
+        id: cache-ccache
+        with:
+          path: ${{ github.workspace }}/ccache.tar.gz
+          # github.run_id forces a cache miss so that new cache is always written during the post phase
+          key: ccache-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: ccache-${{ runner.os }}-
+
+      - name: Build docker image
+        run: docker build -f scripts/Dockerfile_x86_64 -t foo .
+
+      - name: Fetch ccache.tar.gz from Docker build
+        run: docker run --rm -v $PWD:/mytmp foo cp ccache.tar.gz /mytmp
