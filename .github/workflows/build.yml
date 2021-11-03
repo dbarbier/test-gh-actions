@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      BOOST_DIR: 3rdparty/boost
+      BOOST_VERSION: "1.76.0"
 
     steps:
 
@@ -31,6 +34,14 @@ jobs:
               docker image save -o /tmp/docker/foo-deps.tar foo-deps
           fi
           docker images
+
+      - name: Debug boost
+        id: boost
+        run: |
+          mkdir -p $BOOST_DIR
+          set -x; curl --progress-bar --location --output - \
+              https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VERSION/source/boost_${BOOST_VERSION//./_}.tar.bz2 |\
+              tar jxf - -C $BOOST_DIR --strip-components=2 boost_${BOOST_VERSION//./_}/boost
 
       - name: Cache .ccache directory
         uses: actions/cache@v2
