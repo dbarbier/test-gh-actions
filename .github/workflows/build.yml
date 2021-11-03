@@ -17,6 +17,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Debug boost
+        run: |
+          mkdir -p $BOOST_DIR
+          set -x; curl --location --output - \
+              https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VERSION/source/boost_${BOOST_VERSION//./_}.tar.bz2 |\
+              tar jxf - -C $BOOST_DIR --strip-components=2 boost_${BOOST_VERSION//./_}/boost
+          ls -l $BOOST_DIR
+
       - name: Cache docker deps image
         uses: actions/cache@v2
         id: cache-deps
@@ -34,14 +42,6 @@ jobs:
               docker image save -o /tmp/docker/foo-deps.tar foo-deps
           fi
           docker images
-
-      - name: Debug boost
-        id: boost
-        run: |
-          mkdir -p $BOOST_DIR
-          set -x; curl --progress-bar --location --output - \
-              https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VERSION/source/boost_${BOOST_VERSION//./_}.tar.bz2 |\
-              tar jxf - -C $BOOST_DIR --strip-components=2 boost_${BOOST_VERSION//./_}/boost
 
       - name: Cache .ccache directory
         uses: actions/cache@v2
