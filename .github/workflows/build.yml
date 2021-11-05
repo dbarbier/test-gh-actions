@@ -56,8 +56,7 @@ jobs:
           mpm --admin --update
           mpm --update
           mpm --install=@scripts\tex-packages.txt --verbose
-          initexmf --verbose --set-config-value='[MPM]AutoInstall=0' --update-fndb --mkmaps
-          initexmf --verbose --engine=pdftex
+          initexmf --verbose --admin --set-config-value='[MPM]AutoInstall=0' --update-fndb --mkmaps
 
       - name: Install dependencies for documentation (Windows)
         if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
