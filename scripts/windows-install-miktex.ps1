@@ -1,3 +1,5 @@
+Set-PSDebug -Trace 1
+
 # Workaround server failures: MikTeX installation randomly fails
 $wc = New-Object System.Net.WebClient;
 $maxAttempts=5;
