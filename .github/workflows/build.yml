@@ -44,6 +44,13 @@ jobs:
         shell: pwsh
         run: scripts\windows-install-miktex.ps1
 
+      - name: Setup MikTeX (Windows)
+        if: steps.cache-miktex-windows.outputs.cache-hit != 'true'
+        shell: cmd
+        run: |
+          'C:\Program Files\MiKTeX\miktex\bin\x64\initexmf.exe' --admin --verbose --set-config-value='[MPM]AutoInstall=0'
+          'C:\Program Files\MiKTeX\miktex\bin\x64\mpm.exe' --install=@scripts\tex-packages.txt
+
       - name: Install dependencies for documentation (Windows)
         if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
         shell: pwsh

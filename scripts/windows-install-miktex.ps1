@@ -25,9 +25,3 @@ Do {
               --package-set=essential `
               --shared `
               install
-
-## Disable autoinstall
-#'C:\Program Files\MiKTeX\miktex\bin\x64\initexmf.exe' --admin --verbose --set-config-value='[MPM]AutoInstall=0'
-#
-## Install packages
-'C:\Program Files\MiKTeX\miktex\bin\x64\mpm.exe' --install=@scripts\tex-packages.txt
