@@ -16,8 +16,13 @@ Do {
 7z e miktexsetup-x64.zip
 
 # Download MikTeX packages
-.\miktexsetup_standalone.exe --local-package-repository=C:\miktex-repository --package-set=essential download
+.\miktexsetup_standalone.exe --verbose --local-package-repository=C:\miktex-repository `
+              --remote-package-repository="https://ctan.math.illinois.edu/systems/win32/miktex/tm/packages/" `
+              --package-set=essential download
 # Install MikTeX packages
-.\miktexsetup_standalone.exe --verbose --local-package-repository=C:\miktex-repository --package-set=essential --modify-path --shared install
+.\miktexsetup_standalone.exe --local-package-repository=C:\miktex-repository `
+              --package-set=essential `
+              --shared `
+              install
 # Should not be needed, autoinstall is the default
 # C:\Program Files\MiKTeX\miktex\bin\x64\initexmf --admin --verbose --set-config-value='[MPM]AutoInstall=1'
