@@ -63,6 +63,7 @@ jobs:
           initexmf --verbose --update-fndb
           initexmf --report
           miktex-makefmt.exe --engine=pdftex --dest-name=pdflatex --no-dump pdflatex.ini --verbose --disable-installer
+          Get-Content -Path $env:LOCALAPPDATA"\MikTeX\2.9\miktex\log\miktex-makefmt.log"
 
       - name: Install dependencies for documentation (Windows)
         if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
