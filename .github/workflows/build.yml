@@ -48,7 +48,12 @@ jobs:
         if: steps.cache-miktex-windows.outputs.cache-hit != 'true'
         shell: cmd
         run: |
-          'C:\Program Files\MiKTeX\miktex\bin\x64\initexmf.exe' --admin --verbose --set-config-value='[MPM]AutoInstall=0'
+          C:\Program Files\MiKTeX\miktex\bin\x64\initexmf.exe --admin --verbose --set-config-value='[MPM]AutoInstall=0'
+
+      - name: Setup MikTeX (Windows)
+        if: steps.cache-miktex-windows.outputs.cache-hit != 'true'
+        shell: cmd
+        run: |
           'C:\Program Files\MiKTeX\miktex\bin\x64\mpm.exe' --install=@scripts\tex-packages.txt
 
       - name: Install dependencies for documentation (Windows)
