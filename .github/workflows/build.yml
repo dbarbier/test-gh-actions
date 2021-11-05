@@ -7,9 +7,48 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        cfg:
+          #- {os: macos-latest, doc: 1}
+          #- {os: ubuntu-latest, doc: 1}
+          - {os: windows-latest, doc: 1}
+    runs-on: ${{ matrix.cfg.os }}
 
     steps:
-      - name: Build
-        run:
-          env | grep GITHUB_ | sort
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Install Python
+        if: matrix.cfg.doc == 1
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Restore MikTeX cache (Windows)
+        id: cache-miktex-windows
+        if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
+        uses: actions/cache@v2
+        with:
+          path: |
+            C:\Program Files\MiKTeX
+            C:\ProgramData\MiKTeX
+          key: miktex-cache-${{ hashFiles('scripts/windows-install-miktex.ps1') }}
+
+      - name: Install MikTeX (Windows)
+        if: steps.cache-miktex-windows.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: scripts\windows-install-miktex.ps1
+
+      - name: Install dependencies for documentation (Windows)
+        if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
+        shell: pwsh
+        run: |
+          choco install -y --no-progress graphviz.portable
+          # Update PATH
+          echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "C:/Program Files/doxygen/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
