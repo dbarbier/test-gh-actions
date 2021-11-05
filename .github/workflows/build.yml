@@ -49,14 +49,12 @@ jobs:
           echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Setup MikTeX (Windows)
-        if: steps.cache-miktex-windows.outputs.cache-hit != 'true'
         run: |
+          mpm --update
+          mpm --admin --update
+          mpm --update
+          mpm --install=@scripts\tex-packages.txt --verbose
           initexmf --admin --verbose --set-config-value='[MPM]AutoInstall=0'
-
-      - name: Setup MikTeX (Windows)
-        if: steps.cache-miktex-windows.outputs.cache-hit != 'true'
-        run: |
-          mpm.exe --install=@scripts\tex-packages.txt
 
       - name: Install dependencies for documentation (Windows)
         if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
@@ -64,7 +62,6 @@ jobs:
         run: |
           choco install -y --no-progress graphviz.portable
           # Update PATH
-          echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           echo "C:/Program Files/doxygen/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Build doc
