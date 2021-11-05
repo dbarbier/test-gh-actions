@@ -7,9 +7,70 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        cfg:
+          #- {os: macos-latest, doc: 1}
+          #- {os: ubuntu-latest, doc: 1}
+          - {os: windows-latest, doc: 1}
+    runs-on: ${{ matrix.cfg.os }}
 
     steps:
-      - name: Build
-        run:
-          env | grep GITHUB_ | sort
+    - name: Download MikTex (Windows)
+      run: |
+        $wc = New-Object System.Net.WebClient;
+        $maxAttempts=5;
+        $attemptCount=0;
+        Do {
+          $attemptCount++;
+          Try {
+            $wc.DownloadFile("https://ctan.math.illinois.edu/systems/win32/miktex/setup/windows-x64/miktexsetup-4.1-x64.zip","miktexsetup-4.1-x64.zip")
+          } Catch [Exception] {
+            Write-Host $_.Exception | format-list -force
+          }
+        } while (((Test-Path "miktexsetup-4.1-x64.zip") -eq $false) -and ($attemptCount -le $maxAttempts))
+      shell: pwsh
+      if: matrix.cfg.os == 'windows-latest'
+
+    - name: Install libiconv (Windows)
+      uses: suisei-cn/actions-download-file@v1
+      with:
+        url: "https://github.com/pffang/libiconv-for-Windows/releases/download/v1.16/libiconv-for-Windows_1.16.7z"
+        target: .
+      if: matrix.cfg.os == 'windows-latest'
+
+    - name: Extract MikTex zip (Windows)
+      shell: bash
+      run: |
+        unzip miktexsetup-4.1-x64.zip
+      if: matrix.cfg.os == 'windows-latest'
+
+    - name: Download MikTex packages (Windows)
+      shell: bash
+      run: |
+        ./miktexsetup_standalone --verbose \
+                      --local-package-repository=C:/miktex-repository \
+                      --remote-package-repository="https://ctan.math.illinois.edu/systems/win32/miktex/tm/packages/" \
+                      --package-set=essential \
+                      download
+      if: matrix.cfg.os == 'windows-latest'
+
+    - name: Install MikTex packages (Windows)
+      shell: bash
+      run: |
+        ./miktexsetup_standalone --local-package-repository=C:/miktex-repository \
+                      --package-set=essential \
+                      --shared \
+                      install
+      if: matrix.cfg.os == 'windows-latest'
+
+    - name: Setting MikTex paths (Windows)
+      shell: bash
+      run: |
+        echo "C:/Program Files/MiKTeX/miktex/bin/x64/" >> $GITHUB_PATH
+        export PATH="/c/Program Files/MiKTeX/miktex/bin/x64/:$PATH"
+
+        echo "Configuring MiKTeX to install missing packages on the fly"
+        initexmf --admin --verbose --set-config-value='[MPM]AutoInstall=1'
+      if: matrix.cfg.os == 'windows-latest'
