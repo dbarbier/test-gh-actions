@@ -56,8 +56,7 @@ jobs:
           mpm --admin --update
           mpm --update
           mpm --install=@scripts\tex-packages.txt --verbose
-          initexmf --verbose --admin --set-config-value='[MPM]AutoInstall=0' --update-fndb --mkmaps
-          miktex-makefmt --engine=pdftex --dest-name=pdflatex pdflatex.ini --engine-option=-tcx=cp227.tcx --disable-installer --miktex-disable-maintenance
+          initexmf --verbose --admin --set-config-value='[MPM]AutoInstall=0' --update-fndb --mkmaps --dump=pdflatex
 
       - name: Install dependencies for documentation (Windows)
         if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
