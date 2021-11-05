@@ -73,5 +73,5 @@ jobs:
         shell: pwsh
         run: |
           pdflatex foo.tex
-          Get-Content -Path $env:APPDATA"\MikTeX\2.9\miktex\log\pdflatex.log"
-          Get-Content -Path $env:APPDATA"\MiKTeX\2.9\miktex\log\initexmf.log"
+          Get-Content -Path $env:LOCALAPPDATA"\MikTeX\2.9\miktex\log\pdflatex.log"
+          Get-Content -Path $env:LOCALAPPDATA"\MiKTeX\2.9\miktex\log\initexmf.log"
