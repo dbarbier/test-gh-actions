@@ -53,6 +53,8 @@ jobs:
         run: |
           # These 3 calls are needed: https://github.com/MiKTeX/miktex/issues/716
           mpm --update
+          mpm --admin --update
+          mpm --update
           mpm --install=@scripts\tex-packages.txt --verbose
           initexmf --verbose --set-config-value='[MPM]AutoInstall=0' --update-fndb --mkmaps
           initexmf --verbose --engine=pdftex
