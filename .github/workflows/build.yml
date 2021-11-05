@@ -33,35 +33,20 @@ jobs:
       shell: pwsh
       if: matrix.cfg.os == 'windows-latest'
 
-    - name: Install libiconv (Windows)
-      uses: suisei-cn/actions-download-file@v1
-      with:
-        url: "https://github.com/pffang/libiconv-for-Windows/releases/download/v1.16/libiconv-for-Windows_1.16.7z"
-        target: .
-      if: matrix.cfg.os == 'windows-latest'
-
     - name: Extract MikTex zip (Windows)
-      shell: bash
-      run: |
-        unzip miktexsetup-x64.zip
+      run: 7z e miktexsetup-x64.zip
       if: matrix.cfg.os == 'windows-latest'
 
     - name: Download MikTex packages (Windows)
-      shell: bash
       run: |
-        ./miktexsetup_standalone --verbose \
-                      --local-package-repository=C:/miktex-repository \
-                      --remote-package-repository="https://ctan.math.illinois.edu/systems/win32/miktex/tm/packages/" \
-                      --package-set=essential \
-                      download
+        .\miktexsetup_standalone.exe --verbose --local-package-repository=C:\miktex-repository --remote-package-repository="https://ctan.math.illinois.edu/systems/win32/miktex/tm/packages/" --package-set=essential download
       if: matrix.cfg.os == 'windows-latest'
 
     - name: Install MikTex packages (Windows)
-      shell: bash
       run: |
-        ./miktexsetup_standalone --local-package-repository=C:/miktex-repository \
-                      --package-set=essential \
-                      --shared \
+        .\miktexsetup_standalone.exe --local-package-repository=C:\miktex-repository `
+                      --package-set=essential `
+                      --shared `
                       install
       if: matrix.cfg.os == 'windows-latest'
 
