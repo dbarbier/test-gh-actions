@@ -35,8 +35,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            C:\Program Files\MiKTeX
-            C:\ProgramData\MiKTeX
+            ~/AppData/Local/Programs/MiKTeX
+            ~/AppData/Roaming/MiKTeX
           key: miktex-cache-${{ hashFiles('scripts/windows-install-miktex.ps1', 'scripts/tex-packages.txt') }}
 
       - name: Install MikTeX (Windows)
@@ -47,7 +47,6 @@ jobs:
       - name: Add MikTeX to PATH (Windows)
         # echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         run: |
-          dir $env:LOCALAPPDATA"\Programs\MiKTeX\miktex\bin\x64"
           echo $env:LOCALAPPDATA"/Programs/MiKTeX/miktex/bin/x64" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Setup MikTeX (Windows)
@@ -74,5 +73,5 @@ jobs:
         shell: pwsh
         run: |
           pdflatex foo.tex
-          Get-Content -Path $env:LOCALAPPDATA"\Programs\MiKTeX\miktex\log\pdflatex.log"
-          Get-Content -Path $env:LOCALAPPDATA"\Programs\MiKTeX\miktex\log\initexmf.log"
+          Get-Content -Path $env:APPDATA"\MikTeX\2.9\miktex\log\pdflatex.log"
+          Get-Content -Path $env:APPDATA"\MiKTeX\2.9\miktex\log\initexmf.log"
