@@ -19,10 +19,15 @@ Do {
 .\miktexsetup_standalone.exe --verbose --local-package-repository=C:\miktex-repository `
               --remote-package-repository="https://ctan.math.illinois.edu/systems/win32/miktex/tm/packages/" `
               --package-set=essential download
+
 # Install MikTeX packages
 .\miktexsetup_standalone.exe --local-package-repository=C:\miktex-repository `
               --package-set=essential `
               --shared `
               install
-# Should not be needed, autoinstall is the default
-# C:\Program Files\MiKTeX\miktex\bin\x64\initexmf --admin --verbose --set-config-value='[MPM]AutoInstall=1'
+
+# Disable autoinstall
+"C:\Program Files\MiKTeX\miktex\bin\x64\initexmf.exe" --admin --verbose --set-config-value='[MPM]AutoInstall=0'
+
+# Install packages
+"C:\Program Files\MiKTeX/miktex\bin\x64\mpm.exe" --install=@scripts\tex-packages.txt

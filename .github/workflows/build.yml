@@ -37,7 +37,7 @@ jobs:
           path: |
             C:\Program Files\MiKTeX
             C:\ProgramData\MiKTeX
-          key: miktex-cache-${{ hashFiles('scripts/windows-install-miktex.ps1') }}
+          key: miktex-cache-${{ hashFiles('scripts/windows-install-miktex.ps1', 'scripts/tex-packages.txt') }}
 
       - name: Install MikTeX (Windows)
         if: steps.cache-miktex-windows.outputs.cache-hit != 'true'
