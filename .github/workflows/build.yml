@@ -61,6 +61,7 @@ jobs:
           Get-Content -Path $env:LOCALAPPDATA"\MikTeX\2.9\miktex\log\initexmf.log"
           initexmf --verbose --mkmaps --mklinks
           initexmf --verbose --update-fndb
+          initexmf --report 2>nul
 
       - name: Install dependencies for documentation (Windows)
         if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
