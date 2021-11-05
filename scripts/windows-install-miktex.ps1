@@ -23,4 +23,6 @@ Do {
 # Install MikTeX packages
 .\miktexsetup_standalone.exe --local-package-repository=C:\miktex-repository `
               --package-set=essential `
+              --use-registry=no `
+              --shared=no `
               install
