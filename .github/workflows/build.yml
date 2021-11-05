@@ -52,10 +52,10 @@ jobs:
       - name: Setup MikTeX (Windows)
         if: steps.cache-miktex-windows.outputs.cache-hit != 'true'
         run: |
-          # These 3 calls are needed: https://github.com/MiKTeX/miktex/issues/716
-          mpm --update
-          mpm --install=@scripts\tex-packages.txt --verbose
           initexmf --verbose --set-config-value='[MPM]AutoInstall=0'
+          mpm --update
+          mpm --install=miktex-latex --verbose
+          mpm --install=@scripts\tex-packages.txt --verbose
           initexmf --verbose --update-fndb
           initexmf --verbose --dump=pdflatex
           Get-Content -Path $env:LOCALAPPDATA"\MikTeX\2.9\miktex\log\initexmf.log"
