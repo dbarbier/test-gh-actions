@@ -47,6 +47,7 @@ jobs:
       - name: Add MikTeX to PATH (Windows)
         # echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         run: |
+          dir "C:\Users\runneradmin\AppData\Local\Programs\MiKTeX\"
           echo "C:/Users/runneradmin/AppData/Local/Programs/MiKTeX/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Setup MikTeX (Windows)
