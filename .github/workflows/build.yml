@@ -54,7 +54,8 @@ jobs:
           # These 3 calls are needed: https://github.com/MiKTeX/miktex/issues/716
           mpm --update
           mpm --install=@scripts\tex-packages.txt --verbose
-          initexmf --verbose --set-config-value='[MPM]AutoInstall=0' --update-fndb
+          initexmf --verbose --set-config-value='[MPM]AutoInstall=0' --update-fndb --mkmaps
+          initexmf --verbose --engine=pdftex
 
       - name: Install dependencies for documentation (Windows)
         if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
