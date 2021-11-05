@@ -61,7 +61,7 @@ jobs:
           Get-Content -Path $env:LOCALAPPDATA"\MikTeX\2.9\miktex\log\initexmf.log"
           initexmf --verbose --mkmaps --mklinks
           initexmf --verbose --update-fndb
-          initexmf --report 2>nul
+          initexmf --report
           miktex-makefmt.exe --engine=pdftex --dest-name=pdflatex --no-dump pdflatex.ini --verbose --disable-installer
 
       - name: Install dependencies for documentation (Windows)
