@@ -56,7 +56,9 @@ jobs:
           mpm --update
           mpm --install=@scripts\tex-packages.txt --verbose
           initexmf --verbose --set-config-value='[MPM]AutoInstall=0'
+          initexmf --verbose --update-fndb
           initexmf --verbose --dump=pdflatex
+          Get-Content -Path $env:LOCALAPPDATA"\MikTeX\2.9\miktex\log\initexmf.log"
           initexmf --verbose --mkmaps --mklinks
           initexmf --verbose --update-fndb
 
