@@ -47,8 +47,8 @@ jobs:
       - name: Add MikTeX to PATH (Windows)
         # echo "C:/Program Files/MiKTeX/miktex/bin/x64/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         run: |
-          dir $env:LOCALAPPDATA"\Programs\MiKTeX\bin\x64"
-          echo $env:LOCALAPPDATA"/Programs/MiKTeX/bin/x64" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          dir $env:LOCALAPPDATA"\Programs\MiKTeX\miktex\bin\x64"
+          echo $env:LOCALAPPDATA"/Programs/MiKTeX/miktex/bin/x64" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Setup MikTeX (Windows)
         if: steps.cache-miktex-windows.outputs.cache-hit != 'true'
