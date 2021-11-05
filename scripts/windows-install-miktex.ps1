@@ -21,7 +21,7 @@ Do {
               --package-set=essential download
 
 # Install MikTeX packages
-.\miktexsetup_standalone.exe --local-package-repository=C:\miktex-repository `
+.\miktexsetup_standalone.exe --verbose --local-package-repository=C:\miktex-repository `
               --package-set=essential `
               --use-registry=no `
               --shared=no `
