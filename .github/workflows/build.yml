@@ -55,13 +55,11 @@ jobs:
         run: |
           # These 3 calls are needed: https://github.com/MiKTeX/miktex/issues/716
           mpm --update
-          mpm --admin --update
-          mpm --update
           mpm --install=@scripts\tex-packages.txt --verbose
-          initexmf --verbose --admin --set-config-value='[MPM]AutoInstall=0'
-          initexmf --verbose --admin --dump=pdflatex
-          initexmf --verbose --admin --mkmaps --mklinks
-          initexmf --verbose --admin --update-fndb
+          initexmf --verbose --set-config-value='[MPM]AutoInstall=0'
+          initexmf --verbose --dump=pdflatex
+          initexmf --verbose --mkmaps --mklinks
+          initexmf --verbose --update-fndb
 
       - name: Install dependencies for documentation (Windows)
         if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
@@ -76,5 +74,5 @@ jobs:
         shell: pwsh
         run: |
           pdflatex foo.tex
-          Get-Content -Path C:\Users\runneradmin\AppData\Local\MiKTeX\miktex\log\pdflatex.log
-          Get-Content -Path C:\Users\runneradmin\AppData\Local\MiKTeX\miktex\log\initexmf.log
+          Get-Content -Path $env:LOCALAPPDATA"\Programs\MiKTeX\miktex\log\pdflatex.log"
+          Get-Content -Path $env:LOCALAPPDATA"\Programs\MiKTeX\miktex\log\initexmf.log"
