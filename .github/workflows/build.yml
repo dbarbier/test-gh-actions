@@ -17,6 +17,12 @@ jobs:
     runs-on: ${{ matrix.cfg.os }}
 
     steps:
+      - name: Print env
+        shell: bash
+        run: |
+          echo "Event: ${{github.event_name}} on ${{github.sha}}"
+          env | grep GITHUB_ | sort
+
       - name: Checkout source code
         uses: actions/checkout@v2
         with:
