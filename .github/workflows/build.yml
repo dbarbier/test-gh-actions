@@ -22,30 +22,31 @@ jobs:
     name: Set workflow variables
     outputs:
       ref: ${{ steps.setvars.outputs.ref }}
-      fulldocs: ${{ steps.setvars.outputs.full }}
+      fulldocs: ${{ steps.setvars.outputs.fulldocs }}
 
     steps:
       - id: setvars
+        name: Get context
         shell: bash -x {0}
         run: |
           ref=${{github.sha}}
-          value=0
+          fulldocs=0
           if [ "${{github.event_name}}" = "schedule" ]; then
-            value=1
+            fulldocs=1
           elif [ "${{github.event_name}}" = "workflow_dispatch" ]; then
-            # value is 1 if first character is t, T or 1
-            value=$( expr " ${{github.event.inputs.full}}" : " [tT1]" )
+            # fulldocs is 1 if first character is t, T or 1
+            expr " ${{github.event.inputs.fulldocs}}" : " [tT1]" >/dev/null && fulldocs=1
             ref=${{github.event.inputs.ref}}
           elif [ "${{github.event_name}}" = "push" ]; then
-            # value is 1 if pushing on main or ci-doc/*, 0 otherwise
+            # fulldocs is 1 if pushing on main or ci-doc/*, 0 otherwise
             # GITHUB_REF_NAME environment variable is undocumented
-            if [ "$GITHUB_REF_NAME" = "main" ] || expr " $GITHUB_REF_NAME" : " ci-doc/"; then
-              value=1
+            if [ "$GITHUB_REF_NAME" = "main" ] || expr " $GITHUB_REF_NAME" : " ci-doc/" >/dev/null; then
+              fulldocs=1
             fi
           elif [ "${{github.event_name}}" = "pull_request" ]; then
-            value=1
+            fulldocs=1
           fi
-          echo "::set-output name=full::$value"
+          echo "::set-output name=fulldocs::$fulldocs"
           echo "::set-output name=ref::$ref"
 
   build:
