@@ -51,13 +51,6 @@ jobs:
           # Update PATH
           echo "C:/Program Files/doxygen/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
-      - name: Build doc
-        if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
-        shell: pwsh
-        run: |
-          tlmgr conf
-          pdflatex foo.tex
-
       - name: Configure CMake
         run: cmake -S .  -B build -DENABLE_DOC=${{ matrix.cfg.doc }}
 
