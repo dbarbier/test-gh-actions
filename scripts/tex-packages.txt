@@ -1,0 +1,15 @@
+amsmath
+amsfonts
+# required by subfig
+caption
+geometry
+graphics
+hyperref
+import
+# required by rsfs
+jknapltx
+# required by nomencl
+koma-script
+nomencl
+rsfs
+subfig
