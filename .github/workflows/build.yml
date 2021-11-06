@@ -26,6 +26,7 @@ jobs:
 
     steps:
       - id: setvars
+        shell: bash -x {0}
         run: |
           ref=${{github.sha}}
           value=0
