@@ -1,3 +1,6 @@
+bibtex
+makeindex
+
 amsmath
 amsfonts
 # required by subfig
