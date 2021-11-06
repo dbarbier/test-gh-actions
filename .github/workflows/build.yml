@@ -44,13 +44,14 @@ jobs:
 
   build:
     needs: init
+    name: ${{ matrix.cfg.name }}
     strategy:
       fail-fast: false
       matrix:
         cfg:
-          - { os: macos-latest, doc: "${{ needs.init.outputs.fulldocs }}" }
-          - { os: ubuntu-latest, doc: "${{ needs.init.outputs.fulldocs }}" }
-          - { os: windows-latest, doc: "${{ needs.init.outputs.fulldocs }}" }
+          - { os: macos-latest, name: MacOS, doc: "${{ needs.init.outputs.fulldocs }}" }
+          - { os: ubuntu-latest, name: Linux, doc: "${{ needs.init.outputs.fulldocs }}" }
+          - { os: windows-latest, name: Windows, doc: "${{ needs.init.outputs.fulldocs }}" }
     runs-on: ${{ matrix.cfg.os }}
 
     steps:
