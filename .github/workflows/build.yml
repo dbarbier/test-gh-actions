@@ -55,4 +55,5 @@ jobs:
         if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
         shell: pwsh
         run: |
+          tlmgr conf
           pdflatex foo.tex
