@@ -13,7 +13,7 @@ on:
 jobs:
   init:
     # This job determines whether we want to run a full build with documentation;
-    # it sets a context ${{needs.init.outputs.fulldocs}} which can be used
+    # it sets a context variable ${{needs.init.outputs.fulldocs}} which can be used
     # in other steps if their job is declared as "needs: init".
     runs-on: ubuntu-latest
     name: Set workflow variables
@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - id: setvars
-        name: Get context
+        name: Set workflow variables
         shell: bash -x {0}
         run: |
           fulldocs=0
@@ -48,8 +48,8 @@ jobs:
       fail-fast: false
       matrix:
         cfg:
-          #- { os: macos-latest, doc: 1 }
-          #- { os: ubuntu-latest, doc: 1 }
+          - { os: macos-latest, doc: "${{ needs.init.outputs.fulldocs }}" }
+          - { os: ubuntu-latest, doc: "${{ needs.init.outputs.fulldocs }}" }
           - { os: windows-latest, doc: "${{ needs.init.outputs.fulldocs }}" }
     runs-on: ${{ matrix.cfg.os }}
 
