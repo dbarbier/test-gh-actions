@@ -50,7 +50,7 @@ jobs:
       matrix:
         cfg:
           - { os: macos-latest, name: MacOS, doc: "${{ needs.init.outputs.fulldocs }}" }
-          - { os: ubuntu-latest, name: Linux, doc: "${{ needs.init.outputs.fulldocs }}" }
+          - { os: ubuntu-latest, name: Linux, doc: 1 }
           - { os: windows-latest, name: Windows, doc: "${{ needs.init.outputs.fulldocs }}" }
     runs-on: ${{ matrix.cfg.os }}
 
@@ -85,7 +85,7 @@ jobs:
       - name: Install required LaTeX packages (Unix)
         if: (startsWith(matrix.cfg.os, 'macos') || startsWith(matrix.cfg.os, 'ubuntu')) && matrix.cfg.doc == 1
         run: |
-          grep -v -E '^\s*(#.*)$' scripts/tex-packages.txt | xargs sudo tlmgr install
+          grep -v -E '^\s*(#.*)$' scripts/tex-packages.txt | xargs tlmgr install
 
       - name: Install dependencies for documentation (Windows)
         if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
