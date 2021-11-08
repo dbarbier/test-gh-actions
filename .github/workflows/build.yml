@@ -49,7 +49,7 @@ jobs:
       fail-fast: false
       matrix:
         cfg:
-          - { os: macos-latest, name: MacOS, doc: "${{ needs.init.outputs.fulldocs }}" }
+          - { os: macos-latest, name: MacOS, doc: 1 }
     runs-on: ${{ matrix.cfg.os }}
 
     steps:
