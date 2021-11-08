@@ -93,14 +93,40 @@ jobs:
           # Update PATH
           echo "C:/Program Files/doxygen/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
-      - name: Install dependencies for documentation (MacOS)
+      - name: Install graphviz (MacOS)
+        id: cache-graphviz
+        uses: actions/cache@v2
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1
+        with:
+          path: |
+            /usr/local/Cellar/cairo
+            /usr/local/Cellar/fribidi
+            /usr/local/Cellar/gdk-pixbuf
+            /usr/local/Cellar/gobject-introspection
+            /usr/local/Cellar/graphite2
+            /usr/local/Cellar/gts
+            /usr/local/Cellar/harfbuzz
+            /usr/local/Cellar/jasper
+            /usr/local/Cellar/libpthread-stubs
+            /usr/local/Cellar/librsvg
+            /usr/local/Cellar/libx11
+            /usr/local/Cellar/libxau
+            /usr/local/Cellar/libxcb
+            /usr/local/Cellar/libxdmcp
+            /usr/local/Cellar/libxext
+            /usr/local/Cellar/libxrender
+            /usr/local/Cellar/lzo
+            /usr/local/Cellar/netpbm
+            /usr/local/Cellar/pango
+            /usr/local/Cellar/pixman
+            /usr/local/Cellar/xorgproto
+          key: brew-${{runner.os}}-graphviz
+
+      - name: Install dependencies for documentation (MacOS)
+        if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1 && steps.cache-graphviz.outputs.cache-hit != 'true'
         run: |
-          ls -l /usr/local/Cellar
-          brew info doxygen
           brew info graphviz
           brew install doxygen graphviz
-          ls -l /usr/local/Cellar
 
       - name: Configure CMake
         run: cmake -S .  -B build -DENABLE_DOC=${{ matrix.cfg.doc }}
