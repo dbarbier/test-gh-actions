@@ -25,7 +25,8 @@ jobs:
         name: Set workflow variables
         shell: bash -x {0}
         run: |
-          brew search graphviz
+          brew info --json=v1 graphviz
+          brew info --json=v2 graphviz
           fulldocs=0
           if [ "${{github.event_name}}" = "schedule" ]; then
             fulldocs=1
