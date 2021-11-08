@@ -49,9 +49,7 @@ jobs:
       fail-fast: false
       matrix:
         cfg:
-          - { os: macos-latest, name: MacOS, doc: "${{ needs.init.outputs.fulldocs }}" }
-          - { os: ubuntu-latest, name: Linux, doc: 1 }
-          - { os: windows-latest, name: Windows, doc: "${{ needs.init.outputs.fulldocs }}" }
+          - { os: macos-latest, name: MacOS, doc: 1 }
     runs-on: ${{ matrix.cfg.os }}
 
     steps:
@@ -94,6 +92,48 @@ jobs:
           choco install -y --no-progress graphviz.portable
           # Update PATH
           echo "C:/Program Files/doxygen/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Query graphviz version (MacOS)
+        id: mac-graphviz-version
+        if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1
+        shell: bash -x {0}
+        run: |
+          version=$(brew info --json=v1 graphviz | jq '.[].versions.stable')
+          echo "::set-output name=version::$version"
+
+      - name: Install graphviz (MacOS)
+        id: cache-graphviz
+        uses: actions/cache@v2
+        if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1
+        with:
+          path: |
+            /usr/local/Cellar/cairo
+            /usr/local/Cellar/fribidi
+            /usr/local/Cellar/gdk-pixbuf
+            /usr/local/Cellar/gobject-introspection
+            /usr/local/Cellar/graphite2
+            /usr/local/Cellar/gts
+            /usr/local/Cellar/harfbuzz
+            /usr/local/Cellar/jasper
+            /usr/local/Cellar/libpthread-stubs
+            /usr/local/Cellar/librsvg
+            /usr/local/Cellar/libx11
+            /usr/local/Cellar/libxau
+            /usr/local/Cellar/libxcb
+            /usr/local/Cellar/libxdmcp
+            /usr/local/Cellar/libxext
+            /usr/local/Cellar/libxrender
+            /usr/local/Cellar/lzo
+            /usr/local/Cellar/netpbm
+            /usr/local/Cellar/pango
+            /usr/local/Cellar/pixman
+            /usr/local/Cellar/xorgproto
+          key: graphviz-${{runner.os}}-${{steps.mac-graphviz-version.outputs.version}}
+
+      - name: Install dependencies for documentation (MacOS)
+        if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1 && steps.cache-graphviz.outputs.cache-hit != 'true'
+        run: |
+          brew install doxygen graphviz
 
       - name: Configure CMake
         run: cmake -S .  -B build -DENABLE_DOC=${{ matrix.cfg.doc }}
