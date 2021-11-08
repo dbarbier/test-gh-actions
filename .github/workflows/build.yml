@@ -50,8 +50,6 @@ jobs:
       matrix:
         cfg:
           - { os: macos-latest, name: MacOS, doc: "${{ needs.init.outputs.fulldocs }}" }
-          - { os: ubuntu-latest, name: Linux, doc: 1 }
-          - { os: windows-latest, name: Windows, doc: "${{ needs.init.outputs.fulldocs }}" }
     runs-on: ${{ matrix.cfg.os }}
 
     steps:
@@ -94,6 +92,13 @@ jobs:
           choco install -y --no-progress graphviz.portable
           # Update PATH
           echo "C:/Program Files/doxygen/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Install dependencies for documentation (MacOS)
+        if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1
+        run: |
+          ls -l /usr/local/Cellar
+          brew install doxygen graphviz
+          ls -l /usr/local/Cellar
 
       - name: Configure CMake
         run: cmake -S .  -B build -DENABLE_DOC=${{ matrix.cfg.doc }}
