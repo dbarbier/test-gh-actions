@@ -98,7 +98,7 @@ jobs:
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1
         shell: bash -x {0}
         run: |
-          version=$(brew info --json=v1 graphviz | jq '.[].versions.stable')
+          version=$(brew info --json=v1 graphviz | jq '.[].versions.stable' | sed -e 's/"//g')
           echo "::set-output name=version::$version"
 
       - name: Install graphviz (MacOS)
@@ -106,6 +106,7 @@ jobs:
         uses: actions/cache@v2
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1
         with:
+          # FIXME: howto keep this list up-to-date?
           path: |
             /usr/local/Cellar/cairo
             /usr/local/Cellar/fribidi
@@ -128,12 +129,17 @@ jobs:
             /usr/local/Cellar/pango
             /usr/local/Cellar/pixman
             /usr/local/Cellar/xorgproto
-          key: graphviz-${{runner.os}}-${{steps.mac-graphviz-version.outputs.version}}
+          key: ${{runner.os}}-graphviz-${{steps.mac-graphviz-version.outputs.version}}
 
-      - name: Install dependencies for documentation (MacOS)
+      - name: Install dependencies for documentation (MacOS, cache not hit)
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1 && steps.cache-graphviz.outputs.cache-hit != 'true'
         run: |
           brew install doxygen graphviz
+
+      - name: Install dependencies for documentation (MacOS, cache hit)
+        if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1 && steps.cache-graphviz.outputs.cache-hit == 'true'
+        run: |
+          /usr/local/opt/gdk-pixbuf/bin/gdk-pixbuf-query-loaders --update-cache
 
       - name: Configure CMake
         run: cmake -S .  -B build -DENABLE_DOC=${{ matrix.cfg.doc }}
