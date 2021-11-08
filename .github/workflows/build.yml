@@ -25,8 +25,6 @@ jobs:
         name: Set workflow variables
         shell: bash -x {0}
         run: |
-          brew info --json=v1 graphviz
-          brew info --json=v2 graphviz
           fulldocs=0
           if [ "${{github.event_name}}" = "schedule" ]; then
             fulldocs=1
@@ -95,6 +93,36 @@ jobs:
           # Update PATH
           echo "C:/Program Files/doxygen/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
+      - name: Query graphviz version (MacOS)
+        id: graphviz-version
+        if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1
+        shell: bash -x {0}
+        run: |
+          version=$(brew info --json=v1 graphviz | jq '.[].versions.stable')
+          brew info --json=v1 gd gts pango
+          echo "graphviz version $version"
+          echo "::set-output name=version::$version"
+          dependencies="graphviz"
+          maxiter=20
+          while [ $maxiter != 0 ]; do
+              maxiter=$(expr $maxiter - 1)
+              old_dependencies=$dependencies
+              :> brew-depends.txt
+              for pkg in $old_dependencies; do
+                  echo "pkg=$pkg"
+                  # ignore installed packages
+                  brew list $pkg >/dev/null 2>&1 && continue
+                  brew info --json=v1 $pkg | jq '.[].dependencies[]' >> brew-depends.txt
+              done
+              dependencies=$(sort -u brew-depends.txt | awk '{printf "%s ", $0}' | sed -e 's/  */ /g' -e 's/ $//' -e 's/"//g')
+              rm -f brew-depends.txt
+              echo "dependencies=|$dependencies|"
+              [ "x$dependencies" = "x$old_dependencies" ] && break
+          done
+          paths=$dependencies
+          echo "::set-output name=paths::$paths"
+          false
+
       - name: Install graphviz (MacOS)
         id: cache-graphviz
         uses: actions/cache@v2
@@ -122,7 +150,7 @@ jobs:
             /usr/local/Cellar/pango
             /usr/local/Cellar/pixman
             /usr/local/Cellar/xorgproto
-          key: brew-${{runner.os}}-graphviz
+          key: ${{runner.os}}-graphviz-${{steps.graphviz-version.output.version}}
 
       - name: Install dependencies for documentation (MacOS)
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1 && steps.cache-graphviz.outputs.cache-hit != 'true'
