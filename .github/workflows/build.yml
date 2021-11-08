@@ -125,7 +125,7 @@ jobs:
       - name: Install dependencies for documentation (MacOS)
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1 && steps.cache-graphviz.outputs.cache-hit != 'true'
         run: |
-          brew info graphviz
+          brew info --version graphviz
           brew install doxygen graphviz
 
       - name: Configure CMake
