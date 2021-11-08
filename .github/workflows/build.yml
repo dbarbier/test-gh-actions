@@ -97,6 +97,8 @@ jobs:
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1
         run: |
           ls -l /usr/local/Cellar
+          brew info doxygen
+          brew info graphviz
           brew install doxygen graphviz
           ls -l /usr/local/Cellar
 
