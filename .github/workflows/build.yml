@@ -103,23 +103,23 @@ jobs:
           echo "graphviz version $version"
           echo "::set-output name=version::$version"
           dependencies="graphviz"
+          all_dependencies=$dependencies
           maxiter=20
           while [ $maxiter != 0 ]; do
               maxiter=$(expr $maxiter - 1)
               old_dependencies=$dependencies
-              :> brew-depends.txt
+              new_pkgs=
               for pkg in $old_dependencies; do
-                  echo "pkg=$pkg"
                   # ignore installed packages
-                  brew list $pkg >/dev/null 2>&1 && continue
-                  brew info --json=v1 $pkg | jq '.[].dependencies[]' >> brew-depends.txt
+                  brew list $pkg >/dev/null 2>&1 || new_pkgs=$new_pkgs" "$pkg
               done
-              dependencies=$(sort -u brew-depends.txt | awk '{printf "%s ", $0}' | sed -e 's/  */ /g' -e 's/ $//' -e 's/"//g')
-              rm -f brew-depends.txt
+              echo "new_pkgs=$new_pkgs"
+              dependencies=$(brew info --json=v1 $new_pkgs | jq '.[].dependencies[]' | sort -u | awk '{printf "%s ", $0}' | sed -e 's/  */ /g' -e 's/ $//' -e 's/"//g')
               echo "dependencies=|$dependencies|"
               [ "x$dependencies" = "x$old_dependencies" ] && break
+              all_dependencies=$all_dependencies" "$dependencies
           done
-          paths=$dependencies
+          paths=$all_dependencies
           echo "::set-output name=paths::$paths"
           false
 
