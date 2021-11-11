@@ -12,6 +12,17 @@ project(Foo
 
 option (ENABLE_DOC "Generate html documentation" ON)
 
+include(FetchContent)
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+FetchContent_Declare(
+        json
+        # Upstream repository is huge https://github.com/nlohmann/json
+        # This one is optimized for FetchContent
+        GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
+        GIT_TAG v3.10.4)
+
+FetchContent_MakeAvailable(json)
+
 if(ENABLE_DOC)
 	add_subdirectory(doc)
 endif(ENABLE_DOC)
