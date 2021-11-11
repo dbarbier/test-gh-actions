@@ -55,6 +55,7 @@ jobs:
     runs-on: ${{ matrix.cfg.os }}
     env:
       CMAKE_CONFIGURATION_TYPES: Release
+      CMAKE_BUILD_TYPE: Release
       DEPS_IN_CACHE: "-DFETCHCONTENT_FULLY_DISCONNECTED:BOOL=ON"
 
     steps:
@@ -81,9 +82,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            build/_deps/googletest-src
             build/_deps/json-src
-          key: deps-nlohmann_json-3.10.4/gtest-1.11.0
+            build/_deps/googletest-src
+          key: src-nlohmann_json-3.10.4/gtest-1.11.0
 
       - name: Install gtest and json (cache not hit)
         if: steps.cache-json-gtest.outputs.cache-hit != 'true'
@@ -170,3 +171,8 @@ jobs:
 
       - name: Build
         run: cmake --build build
+
+      - name: Test
+        run: |
+          cd build
+          ctest -j 2 --output-on-failure
