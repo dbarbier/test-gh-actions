@@ -21,7 +21,7 @@ FetchContent_Declare(
         # Upstream repository is huge https://github.com/nlohmann/json
         # This one is optimized for FetchContent
         GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
-        GIT_TAG v3.10.4)
+        GIT_TAG b48095ee99aff048dc4760dd644b848bc1e6f0c3) # commit for v3.10.4
 
 FetchContent_MakeAvailable(json)
 
@@ -29,7 +29,7 @@ include(FetchContent)
 FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://github.com/google/googletest.git
-        GIT_TAG release-1.11.0)
+        GIT_TAG e2239ee6043f73722e7aa812a459f54a28552929) # commit for release-1.11.0
 
 set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
 set(BUILD_GTEST ON CACHE BOOL "" FORCE)
