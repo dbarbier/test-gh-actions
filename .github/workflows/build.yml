@@ -54,9 +54,6 @@ jobs:
           - { os: windows-latest, name: Windows, doc: 0 }
     runs-on: ${{ matrix.cfg.os }}
     env:
-      CMAKE_CONFIGURATION_TYPES: Release
-      CMAKE_BUILD_TYPE: Release
-      CTEST_CONFIGURATION_TYPE: Release
       DEPS_IN_CACHE: "-DFETCHCONTENT_FULLY_DISCONNECTED:BOOL=ON"
 
     steps:
@@ -161,6 +158,14 @@ jobs:
         run: |
           /usr/local/opt/gdk-pixbuf/bin/gdk-pixbuf-query-loaders --update-cache
 
+      - name: Set default CMake configurations  (Windows)
+        if: startsWith(matrix.cfg.os, 'windows')
+        run: echo "CMAKE_CONFIGURATION_TYPES=Release|x64" >> $GITHUB_ENV
+
+      - name: Set default CMake configurations  (non Windows)
+        if: "!startsWith(matrix.cfg.os, 'windows')"
+        run: echo "CMAKE_BUILD_TYPE=Release" >> $GITHUB_ENV
+
       - name: Configure CMake
         run: >
           cmake
@@ -169,9 +174,6 @@ jobs:
           ${DEPS_IN_CACHE:--DFETCHCONTENT_QUIET:BOOL=OFF}
           $DEPS_IN_CACHE
           -DENABLE_DOC=${{ matrix.cfg.doc }}
-          -DCMAKE_CONFIGURATION_TYPES=$CMAKE_CONFIGURATION_TYPES
-          -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE
-          -DCTEST_CONFIGURATION_TYPE=$CTEST_CONFIGURATION_TYPE
 
       - name: Build
         run: cmake --build build --config Release
