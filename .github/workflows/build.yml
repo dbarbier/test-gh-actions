@@ -54,6 +54,7 @@ jobs:
           - { os: windows-latest, name: Windows, doc: 0 }
     runs-on: ${{ matrix.cfg.os }}
     env:
+      CMAKE_CONFIGURATION_TYPES: Release
       DEPS_IN_CACHE: "-DFETCHCONTENT_FULLY_DISCONNECTED:BOOL=ON"
 
     steps:
