@@ -55,7 +55,9 @@ jobs:
     runs-on: ${{ matrix.cfg.os }}
     env:
       CMAKE_CONFIGURATION_TYPES: Release
+      CMAKE_TRY_COMPILE_CONFIGURATION: Release
       CMAKE_BUILD_TYPE: Release
+      CTEST_CONFIGURATION_TYPE: Release
       DEPS_IN_CACHE: "-DFETCHCONTENT_FULLY_DISCONNECTED:BOOL=ON"
 
     steps:
