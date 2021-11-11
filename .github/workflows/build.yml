@@ -174,9 +174,9 @@ jobs:
           -DCTEST_CONFIGURATION_TYPE=$CTEST_CONFIGURATION_TYPE
 
       - name: Build
-        run: cmake --build build
+        run: cmake --build build --config Release
 
       - name: Test
         run: |
           cd build
-          ctest -j 2 --output-on-failure
+          ctest -j 2 -C Release --output-on-failure
