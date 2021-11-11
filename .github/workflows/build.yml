@@ -54,7 +54,7 @@ jobs:
           - { os: windows-latest, name: Windows, doc: 0 }
     runs-on: ${{ matrix.cfg.os }}
     env:
-      DEPS_IN_CACHE: "-DFETCHCONTENT_FULLY_DISCONNECTED:BOOL=ON"
+      DEPS_IN_CACHE: "-DFETCHCONTENT_FULLY_DISCONNECTED:BOOL=ON -DFETCHCONTENT_UPDATE_DISCONNECTED:BOOL=ON"
 
     steps:
       - name: Print env
