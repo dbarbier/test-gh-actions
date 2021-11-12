@@ -29,7 +29,9 @@ FetchContent_Declare(
         GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
         GIT_TAG b48095ee99aff048dc4760dd644b848bc1e6f0c3) # commit for v3.10.4
 
+message(STATUS "before FetchContent_MakeAvailable")
 FetchContent_MakeAvailable(json)
+message(STATUS "after FetchContent_MakeAvailable")
 
 include(FetchContent)
 FetchContent_Declare(
