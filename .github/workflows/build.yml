@@ -168,11 +168,16 @@ jobs:
 
       - name: Configure CMake (Windows)
         if: startsWith(matrix.cfg.os, 'windows')
+        shell: cmd
         run: >
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\vc\Auxiliary\build\vcvarsall.bat" x64
+
           cmake
           -S .
           -B build
           -A x64
+          -T v142
+          -DCMAKE_CXX_COMPILER=cl.exe
           -DCMAKE_CONFIGURATION_TYPES=Release
           ${DEPS_IN_CACHE:--DFETCHCONTENT_QUIET:BOOL=OFF}
           $DEPS_IN_CACHE
