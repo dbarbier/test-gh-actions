@@ -166,11 +166,26 @@ jobs:
         if: "!startsWith(matrix.cfg.os, 'windows')"
         run: echo "CMAKE_BUILD_TYPE=Release" >> $GITHUB_ENV
 
-      - name: Configure CMake
+      - name: Configure CMake (Windows)
+        if: startsWith(matrix.cfg.os, 'windows')
         run: >
           cmake
           -S .
           -B build
+          -A x64
+          -DCMAKE_CONFIGURATION_TYPES=Release
+          ${DEPS_IN_CACHE:--DFETCHCONTENT_QUIET:BOOL=OFF}
+          $DEPS_IN_CACHE
+          -DENABLE_DOC=${{ matrix.cfg.doc }}
+          --profiling-format=google-trace --profiling-output=debug-${{ runner.os }}.log
+
+      - name: Configure CMake (not Windows)
+        if: "!startsWith(matrix.cfg.os, 'windows')"
+        run: >
+          cmake
+          -S .
+          -B build
+          -DCMAKE_BUILD_TYPE=Release
           ${DEPS_IN_CACHE:--DFETCHCONTENT_QUIET:BOOL=OFF}
           $DEPS_IN_CACHE
           -DENABLE_DOC=${{ matrix.cfg.doc }}
