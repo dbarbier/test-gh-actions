@@ -179,10 +179,9 @@ jobs:
           -T v142
           -DCMAKE_CXX_COMPILER=cl.exe
           -DCMAKE_CONFIGURATION_TYPES=Release
-          ${DEPS_IN_CACHE:--DFETCHCONTENT_QUIET:BOOL=OFF}
-          $DEPS_IN_CACHE
           -DENABLE_DOC=${{ matrix.cfg.doc }}
           --profiling-format=google-trace --profiling-output=debug-${{ runner.os }}.log
+          -DFETCHCONTENT_FULLY_DISCONNECTED:BOOL=ON -DFETCHCONTENT_UPDATE_DISCONNECTED:BOOL=ON
 
       - name: Configure CMake (not Windows)
         if: "!startsWith(matrix.cfg.os, 'windows')"
