@@ -44,7 +44,7 @@ jobs:
       - name: Configure CMake
         run: |
           echo $env:EXTRA_CMAKE_ARGS
-          cmake -S .  -B build $env:EXTRA_CMAKE_ARGS
+          cmake $env:EXTRA_CMAKE_ARGS -B build -S .
 
       - name: Build
         run: cmake --build build --config Release
