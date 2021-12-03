@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <mpi.h>
-#include <hypre/HYPRE_struct_ls.h>
+#include <HYPRE_struct_ls.h>
 
 #include "f.hpp"
 
