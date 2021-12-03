@@ -17,11 +17,29 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v2
 
+      - name: Download Microsoft MPI (Windows)
+        if: matrix.os == 'windows-latest'
+        run: (new-object net.webclient).DownloadFile("https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisetup.exe", "msmpisetup.exe")
+        shell: powershell
+
+      - name: Install Microsoft MPI (Windows)
+        if: matrix.os == 'windows-latest'
+        run: msmpisetup.exe -unattend -minimal
+        shell: cmd
+
+      - name: Install openMPI (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt install libopenmpi-dev
+
+      - name: Install openMPI (MacOS)
+        if: matrix.os == 'macos-latest'
+        run: brew install openmpi
+
       - name: Configure CMake
         run: cmake -S .  -B build
 
       - name: Build
-        run: cmake --build build --config Release -DENABLE_TESTING:BOOL=ON
+        run: cmake --build build --config Release
 
       - name: Test
         run: cmake --build build --config Release --target test
