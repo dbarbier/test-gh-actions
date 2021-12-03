@@ -43,11 +43,8 @@ jobs:
 
       - name: Configure CMake
         run: |
-          echo $EXTRA_CMAKE_ARGS
-          cmake -S .  -B build $EXTRA_CMAKE_ARGS
-
-      - name: Configure CMake
-        run: cmake -S .  -B build -DMPI_C_INCLUDE_PATH:PATH="C:/Program Files (x86)/Microsoft SDKs/MPI/Include" -DMPI_C_LIBRARIES:PATH="C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64/msmpi.lib" -DMPI_CXX_INCLUDE_PATH:PATH="C:/Program Files (x86)/Microsoft SDKs/MPI/Include" -DMPI_CXX_LIBRARIES:PATH="C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64/msmpi.lib"
+          echo $env:EXTRA_CMAKE_ARGS
+          cmake -S .  -B build $env:EXTRA_CMAKE_ARGS
 
       - name: Build
         run: cmake --build build --config Release
