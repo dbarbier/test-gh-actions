@@ -28,7 +28,7 @@ jobs:
       - name: Install Microsoft MPI (Windows)
         if: matrix.os == 'windows-latest'
         run: |
-          .\msmpisetup.exe -unattend -minimal
+          .\msmpisetup.exe -unattend -minimal -verbose
           .\msmpisdk.msi /passive /verbose
           echo "C:/Program Files/Microsoft MPI/Bin/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           echo "I_MPI_ROOT=""C:/Program Files (x86)/Microsoft SDKs/MPI""" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
