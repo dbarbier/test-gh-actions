@@ -38,8 +38,8 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: cmd
         run: |
-          dir "C:\Program Files\Microsoft MPI\Bin"
-          dir "C:\Program Files (x86)\Microsoft SDKs\MPI"
+          dir "C:\Program Files\Microsoft MPI"
+          dir "C:\Program Files (x86)\Microsoft SDKs"
 
       - name: Install openMPI (Linux)
         if: matrix.os == 'ubuntu-latest'
