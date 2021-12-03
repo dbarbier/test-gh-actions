@@ -7,9 +7,21 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Configure CMake
+        run: cmake -S .  -B build
+
       - name: Build
-        run:
-          env | grep GITHUB_ | sort
+        run: cmake --build build --config Release -DENABLE_TESTING:BOOL=ON
+
+      - name: Test
+        run: cmake --build build --config Release --target test
