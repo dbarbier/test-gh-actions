@@ -12,6 +12,8 @@ jobs:
       matrix:
         os: [windows-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      EXTRA_CMAKE_ARGS: ""
 
     steps:
       - name: Checkout source code
@@ -29,6 +31,7 @@ jobs:
           .\msmpisetup.exe -unattend -minimal
           .\msmpisdk.msi /passive
           echo "C:/Program Files/Microsoft MPI/Bin/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "EXTRA_CMAKE_ARGS=-DMPI_C_INCLUDE_PATH:PATH=C:/Program Files (x86)/Microsoft SDKs/MPI/Include -DMPI_C_LIBRARIES:PATH=C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64/msmpi.lib -DMPI_CXX_INCLUDE_PATH:PATH=C:/Program Files (x86)/Microsoft SDKs/MPI/Include -DMPI_CXX_LIBRARIES:PATH=C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64/msmpi.lib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Install openMPI (Linux)
         if: matrix.os == 'ubuntu-latest'
@@ -39,7 +42,7 @@ jobs:
         run: brew install openmpi
 
       - name: Configure CMake
-        run: cmake -S .  -B build
+        run: cmake -S .  -B build -DMPI_C_INCLUDE_PATH:PATH="C:/Program Files (x86)/Microsoft SDKs/MPI/Include" -DMPI_C_LIBRARIES:PATH="C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64/msmpi.lib" -DMPI_CXX_INCLUDE_PATH:PATH="C:/Program Files (x86)/Microsoft SDKs/MPI/Include" -DMPI_CXX_LIBRARIES:PATH="C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64/msmpi.lib"
 
       - name: Build
         run: cmake --build build --config Release
