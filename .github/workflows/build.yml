@@ -19,13 +19,16 @@ jobs:
 
       - name: Download Microsoft MPI (Windows)
         if: matrix.os == 'windows-latest'
-        run: (new-object net.webclient).DownloadFile("https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisetup.exe", "msmpisetup.exe")
-        shell: powershell
+        run: |
+          Invoke-WebRequest https://github.com/Microsoft/Microsoft-MPI/releases/download/v10.1.1/msmpisetup.exe -OutFile msmpisetup.exe
+          Invoke-WebRequest https://github.com/Microsoft/Microsoft-MPI/releases/download/v10.1.1/msmpisdk.msi -OutFile msmpisdk.msi
 
       - name: Install Microsoft MPI (Windows)
         if: matrix.os == 'windows-latest'
-        run: msmpisetup.exe -unattend -minimal
-        shell: cmd
+        run: |
+          msmpisetup.exe -unattend -minimal
+          msmpisdk.msi /passive
+          echo "C:/Program Files/Microsoft MPI/Bin/" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Install openMPI (Linux)
         if: matrix.os == 'ubuntu-latest'
