@@ -27,3 +27,4 @@ jobs:
           vcpkgGitCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
           vcpkgTriplet: 'x64-windows'
           vcpkgArguments: 'gtest eigen3 boost-log boost-program-options'
+          appendedCacheKey: 1
