@@ -80,4 +80,5 @@ jobs:
         run: cat build/CTestTestfile.cmake
 
       - name: Test
-        run: cmake --build build --config Release --target test
+        working-directory: build
+        run: ctest -C Release
