@@ -42,7 +42,7 @@ jobs:
         id: check-msmpi
         shell: bash
         run: |
-          echo "::set-output name=msmpi::$($(echo -E '${{ env.VCPKG_INSTALLATION_ROOT }}' | sed -e 's,\\,/,g')/vcpkg list msmpi:x64-windows | wc -l)"
+          echo "::set-output name=msmpi::$($(echo -E "$VCPKG_INSTALLATION_ROOT" | sed -e 's,\\,/,g')/vcpkg list msmpi:x64-windows | wc -l)"
 
       - name: Downloading MPI
         if: steps.check-msmpi.outputs.msmpi == 0
