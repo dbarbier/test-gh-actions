@@ -67,3 +67,13 @@ jobs:
         shell: bash
         run: |
           $VCPKG_INSTALLATION_ROOT/vcpkg install --debug --triplet x64-windows $(jq -j '.dependencies[] | ., " "' $VCPKG_DEPS_JSON)
+
+      - name: Configure CMake
+        run: |
+          cmake -B build -S .
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Test
+        run: cmake --build build --config Release --target test
