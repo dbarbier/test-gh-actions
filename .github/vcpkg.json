@@ -4,6 +4,8 @@
   "dependencies": [
     "gtest",
     "eigen3",
-    "msmpi"
+    "msmpi",
+    "boost-log",
+    "boost-program-options"
   ]
 }
