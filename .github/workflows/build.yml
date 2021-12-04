@@ -43,7 +43,7 @@ jobs:
         shell: bash
         run: |
           # When no package is installed, "vcpkg list msmpi" prints a line
-          missing=$( VCPKG_INSTALLATION_ROOT/vcpkg list msmpi | grep -q msmpi; echo $? )
+          missing=$( $VCPKG_INSTALLATION_ROOT/vcpkg list msmpi | grep -q msmpi; echo $? )
           echo "::set-output name=missing::$missing"
 
       - name: Downloading MPI
