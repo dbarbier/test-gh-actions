@@ -42,6 +42,8 @@ jobs:
         id: check-msmpi
         shell: bash
         run: |
+          $VCPKG_INSTALLATION_ROOT/vcpkg list msmpi:x64-windows
+          exit 1
           isinstalled=$( $VCPKG_INSTALLATION_ROOT/vcpkg list msmpi:x64-windows | wc -l )
           echo "::set-output name=msmpi::$isinstalled"
 
