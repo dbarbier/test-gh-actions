@@ -14,17 +14,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       VCPKG_DISABLE_METRICS: 1
+      VCPKG_DEPS_JSON: ${{ github.workspace }}/.github/vcpkg.json
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg-cache
+      VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/vcpkg-cache,readwrite"
 
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
 
       - name: Downloading MPI
+        # URLs copied from https://github.com/microsoft/vcpkg/blob/master/ports/msmpi/portfile.cmake
         shell: powershell
         run: |
             $client = new-object System.Net.WebClient
-            $client.DownloadFile("https://github.com/Microsoft/Microsoft-MPI/releases/download/v10.0/msmpisetup.exe", "msmpisetup.exe")
-            $client.DownloadFile("https://github.com/Microsoft/Microsoft-MPI/releases/download/v10.0/msmpisdk.msi", "msmpisdk.msi")
+            $client.DownloadFile("https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisetup.exe", "msmpisetup.exe")
+            $client.DownloadFile("https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisdk.msi", "msmpisdk.msi")
 
       - name: Installing MPI
         shell: cmd
@@ -32,11 +36,25 @@ jobs:
             msmpisetup.exe -unattend
             msmpisdk.msi /passive
 
-      - name: Restore vcpkg packages
-        uses: lukka/run-vcpkg@v6
-        id: runvcpkg
+      - name: Setup vcpkg
+        run: |
+          mkdir -p ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+          cd $env:VCPKG_INSTALLATION_ROOT
+          ./bootstrap-vcpkg.bat -disableMetrics
+          ./vcpkg --version > ${{ github.workspace }}/vcpkg-version.txt
+
+      - name: Cache vcpkg
+        uses: actions/cache@v2
+        id: vcpkg-cache
         with:
-          # The Git commit id of vcpkg to be checked out. This is only needed because we are not using a submodule.
-          vcpkgGitCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
-          vcpkgTriplet: 'x64-windows'
-          vcpkgArguments: 'gtest eigen3 boost-log boost-program-options msmpi'
+          path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}/*
+          key: ${{ runner.os }}-vcpkg-x64-${{ hashFiles('vcpkg-version.txt') }}-${{ hashFiles(env.VCPKG_DEPS_JSON) }}
+          restore-keys: |
+            ${{ runner.os }}-vcpkg-x64-${{ hashFiles('vcpkg-version.txt') }}-
+            ${{ runner.os }}-vcpkg-x64-
+
+      - name: Install Dependencies
+        if: ${{ !steps.vcpkg-cache.outputs.cache-hit }}
+        shell: bash
+        run: |
+          $VCPKG_INSTALLATION_ROOT/vcpkg install --debug --triplet x64-windows $(jq -j '.dependencies[] | ., " "' $(echo -E '${{ env.VCPKG_DEPS_JSON }}' | sed -e 's,\\,/,g'))

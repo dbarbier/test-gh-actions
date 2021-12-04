@@ -1,0 +1,9 @@
+{
+  "name": "mycode",
+  "version-string": "1",
+  "dependencies": [
+    "gtest",
+    "eigen3",
+    "msmpi"
+  ]
+}
