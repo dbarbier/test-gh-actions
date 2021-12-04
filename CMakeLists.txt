@@ -38,7 +38,7 @@ include(CTest)
 enable_testing()
 add_test (
     NAME example_main
-    COMMAND mpirun -n 1 $<TARGET_FILE:main>
+    COMMAND mpiexec -n 1 $<TARGET_FILE:main>
 )
 
 install(TARGETS main)
