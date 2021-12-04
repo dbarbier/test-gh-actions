@@ -2,11 +2,13 @@
   "name": "mycode",
   "version-string": "1",
   "dependencies": [
-    "gtest",
-    "eigen3",
-    "msmpi",
     "boost-log",
     "boost-program-options",
-    "hypre"
+    "boost-program-options",
+    "eigen3",
+    "gtest",
+    "hypre",
+    "msmpi",
+    "nlohmann-json"
   ]
 }
