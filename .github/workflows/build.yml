@@ -19,6 +19,19 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v2
 
+      - name: Downloading MPI
+        shell: powershell
+        run: |
+            $client = new-object System.Net.WebClient
+            $client.DownloadFile("https://github.com/Microsoft/Microsoft-MPI/releases/download/v10.0/msmpisetup.exe", "msmpisetup.exe")
+            $client.DownloadFile("https://github.com/Microsoft/Microsoft-MPI/releases/download/v10.0/msmpisdk.msi", "msmpisdk.msi")
+
+      - name: Installing MPI
+        shell: cmd
+        run: |
+            msmpisetup.exe -unattend
+            msmpisdk.msi /passive
+
       - name: Restore vcpkg packages
         uses: lukka/run-vcpkg@v6
         id: runvcpkg
@@ -28,3 +41,4 @@ jobs:
           vcpkgTriplet: 'x64-windows'
           vcpkgArguments: 'gtest eigen3 boost-log boost-program-options'
           appendedCacheKey: 1
+
