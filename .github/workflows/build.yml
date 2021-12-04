@@ -75,7 +75,7 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake -B build -S . -DCMAKE_PREFIX_PATH=${{ steps.vcpkg-root.outputs.path }}/installed
+          cmake -B build -S . -DCMAKE_PREFIX_PATH=${{ steps.vcpkg-root.outputs.path }}/installed/x64-windows
 
       - name: Build
         run: cmake --build build --config Release
