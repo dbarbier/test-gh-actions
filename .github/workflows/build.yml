@@ -22,25 +22,10 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v2
 
-      - name: Downloading MPI
-        # URLs copied from https://github.com/microsoft/vcpkg/blob/master/ports/msmpi/portfile.cmake
-        shell: powershell
-        run: |
-            $client = new-object System.Net.WebClient
-            $client.DownloadFile("https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisetup.exe", "msmpisetup.exe")
-            $client.DownloadFile("https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisdk.msi", "msmpisdk.msi")
-
-      - name: Installing MPI
-        shell: cmd
-        run: |
-            msmpisetup.exe -unattend
-            msmpisdk.msi /passive
-
       - name: Setup vcpkg
         run: |
           mkdir -p ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
           cd $env:VCPKG_INSTALLATION_ROOT
-          #./bootstrap-vcpkg.bat -disableMetrics
           ./vcpkg --version > ${{ github.workspace }}/vcpkg-version.txt
 
       - name: Cache vcpkg
@@ -53,8 +38,29 @@ jobs:
             ${{ runner.os }}-vcpkg-x64-${{ hashFiles('vcpkg-version.txt') }}-
             ${{ runner.os }}-vcpkg-x64-
 
-      - name: Install Dependencies
-        if: ${{ !steps.vcpkg-cache.outputs.cache-hit }}
+      - name: Check if msmpi is installed
+        id: check-msmpi
+        shell: bash
+        run: |
+          echo "::set-output name=msmpi::$($(echo -E '${{ env.VCPKG_INSTALLATION_ROOT }}' | sed -e 's,\\,/,g')/vcpkg list msmpi:x64-windows | wc -l)"
+
+      - name: Downloading MPI
+        if: steps.check-msmpi.outputs.msmpi == 0
+        # URLs copied from https://github.com/microsoft/vcpkg/blob/master/ports/msmpi/portfile.cmake
+        shell: powershell
+        run: |
+            $client = new-object System.Net.WebClient
+            $client.DownloadFile("https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisetup.exe", "msmpisetup.exe")
+            $client.DownloadFile("https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisdk.msi", "msmpisdk.msi")
+
+      - name: Installing MPI
+        if: steps.check-msmpi.outputs.msmpi == 0
+        shell: cmd
+        run: |
+            msmpisetup.exe -unattend
+            msmpisdk.msi /passive
+
+      - name: Install vcpkg packages
         shell: bash
         run: |
           $VCPKG_INSTALLATION_ROOT/vcpkg install --debug --triplet x64-windows $(jq -j '.dependencies[] | ., " "' $(echo -E '${{ env.VCPKG_DEPS_JSON }}' | sed -e 's,\\,/,g'))
