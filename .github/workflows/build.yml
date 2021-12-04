@@ -64,3 +64,4 @@ jobs:
         shell: bash
         run: |
           $VCPKG_INSTALLATION_ROOT/vcpkg install --debug --triplet x64-windows $(jq -j '.dependencies[] | ., " "' $(echo -E '${{ env.VCPKG_DEPS_JSON }}' | sed -e 's,\\,/,g'))
+
