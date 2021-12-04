@@ -6,6 +6,7 @@
     "eigen3",
     "msmpi",
     "boost-log",
-    "boost-program-options"
+    "boost-program-options",
+    "hypre"
   ]
 }
