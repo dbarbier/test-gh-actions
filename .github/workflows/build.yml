@@ -68,17 +68,16 @@ jobs:
         run: |
           $VCPKG_INSTALLATION_ROOT/vcpkg install --debug --triplet x64-windows $(jq -j '.dependencies[] | ., " "' $VCPKG_DEPS_JSON)
 
-      - name: List vcpkg packages
-        shell: bash
-        run: |
-          ls -lR $VCPKG_INSTALLATION_ROOT/installed
-
       - name: Configure CMake
         run: |
-          cmake -B build -S . -DCMAKE_PREFIX_PATH=${{ steps.vcpkg-root.outputs.path }}/installed/x64-windows
+          cmake -B build -S . -DCMAKE_SYSTEM_PREFIX_PATH:PATH=${{ steps.vcpkg-root.outputs.path }}/installed/x64-windows
 
       - name: Build
         run: cmake --build build --config Release
+
+      - name: Debug Test
+        shell: bash
+        run: cat build/CTestTestfile.cmake
 
       - name: Test
         run: cmake --build build --config Release --target test
