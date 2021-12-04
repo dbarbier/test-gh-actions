@@ -15,34 +15,35 @@ jobs:
     env:
       VCPKG_DISABLE_METRICS: 1
       VCPKG_DEPS_JSON: ${{ github.workspace }}/.github/vcpkg.json
-      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg-cache
-      VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/vcpkg-cache,readwrite"
 
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
 
       - name: Setup vcpkg
+        id: vcpkg-root
+        shell: bash
         run: |
-          mkdir -p ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
-          cd $env:VCPKG_INSTALLATION_ROOT
-          ./vcpkg --version > ${{ github.workspace }}/vcpkg-version.txt
+          cd $VCPKG_INSTALLATION_ROOT
+          ./vcpkg --version > $GITHUB_WORKSPACE/vcpkg-version.txt
+          echo "::set-output name=path::$(echo -E "$VCPKG_INSTALLATION_ROOT" | sed -e 's,\\,/,g')"
 
       - name: Cache vcpkg
         uses: actions/cache@v2
         id: vcpkg-cache
         with:
-          path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}/*
-          key: ${{ runner.os }}-vcpkg-x64-${{ hashFiles('vcpkg-version.txt') }}-${{ hashFiles(env.VCPKG_DEPS_JSON) }}
+          path: ${{ steps.vcpkg-root.outputs.path }}/installed
+          key: vcpkg-${{ runner.os }}-x64-${{ hashFiles('vcpkg-version.txt') }}-${{ hashFiles(env.VCPKG_DEPS_JSON) }}
           restore-keys: |
-            ${{ runner.os }}-vcpkg-x64-${{ hashFiles('vcpkg-version.txt') }}-
-            ${{ runner.os }}-vcpkg-x64-
+            vcpkg-${{ runner.os }}-x64-${{ hashFiles('vcpkg-version.txt') }}-
+            vcpkg-${{ runner.os }}-x64-
 
       - name: Check if msmpi is installed
         id: check-msmpi
         shell: bash
         run: |
-          echo "::set-output name=msmpi::$($(echo -E "$VCPKG_INSTALLATION_ROOT" | sed -e 's,\\,/,g')/vcpkg list msmpi:x64-windows | wc -l)"
+          isinstalled=$( $VCPKG_INSTALLATION_ROOT/vcpkg list msmpi:x64-windows | wc -l )
+          echo "::set-output name=msmpi::$isinstalled"
 
       - name: Downloading MPI
         if: steps.check-msmpi.outputs.msmpi == 0
