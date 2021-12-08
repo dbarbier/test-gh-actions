@@ -2,8 +2,8 @@
   "name": "mycode",
   "version-string": "1",
   "dependencies": [
+    "boost-filesystem",
     "boost-log",
-    "boost-program-options",
     "boost-program-options",
     "eigen3",
     "gtest",
