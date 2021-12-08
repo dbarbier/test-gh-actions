@@ -2,6 +2,7 @@
   "name": "mycode",
   "version-string": "1",
   "dependencies": [
+    "arrow",
     "boost-filesystem",
     "boost-log",
     "boost-program-options",
