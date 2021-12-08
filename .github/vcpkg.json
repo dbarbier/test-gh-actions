@@ -1,0 +1,8 @@
+{
+  "name": "mycode",
+  "version-string": "1",
+  "dependencies": [
+    "msmpi",
+    "nlohmann-json"
+  ]
+}
