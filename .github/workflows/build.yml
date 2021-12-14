@@ -54,7 +54,7 @@ jobs:
 
   job-if:
     needs: [debug]
-    if: ${{ needs.setop.build_doc == 'true' }}
+    if: ${{ needs.debug.needs.setop.build_doc == 'true' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -62,5 +62,5 @@ jobs:
         run: echo "ok"
   
       - name: Conditional step
-        if: ${{ needs.setop.outputs.build_doc == 'true' }}
+        if: ${{ needs.debug.needs.setop.outputs.build_doc == 'true' }}
         run: echo "run"
