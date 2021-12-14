@@ -29,46 +29,51 @@ jobs:
 
   debug:
     needs: [setop]
-    strategy:
-      matrix:
-        os: ["macos-10.15", "macos-11"]
-        python-version: ${{ fromJSON(needs.setop.outputs.python_version) }}
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: pip debug
-        run: |
-          pip debug -v
+      - name: hop
+        run: echo ok
 
   test:
     needs: [debug]
     runs-on: ubuntu-latest
 
     steps:
-      - name: if needs.debug.needs.setop.outputs.build_doc
-        if: ${{ needs.debug.needs.setop.outputs.build_doc == 'true' }}
+      - name: if needs.setop.outputs.build_doc
+        if: ${{ needs.setop.outputs.build_doc == 'true' }}
         run: echo "run"
 
+  test-setop:
+    needs: [setop, debug]
+    runs-on: ubuntu-latest
+
+    steps:
       - name: if needs.setop.outputs.build_doc
         if: ${{ needs.setop.outputs.build_doc == 'true' }}
         run: echo "run"
 
   job-if:
     needs: [debug]
-    if: ${{ needs.debug.needs.setop.build_doc == 'true' }}
+    if: ${{ needs.setop.outputs.build_doc == 'true' }}
     runs-on: ubuntu-latest
 
     steps:
       - name: Start
         run: echo "ok"
   
-      - name: if needs.debug.needs.setop.outputs.build_doc
-        if: ${{ needs.debug.needs.setop.outputs.build_doc == 'true' }}
+      - name: if needs.setop.outputs.build_doc
+        if: ${{ needs.setop.outputs.build_doc == 'true' }}
         run: echo "run"
 
+  job-if-setop:
+    needs: [setop, debug]
+    if: ${{ needs.setop.outputs.build_doc == 'true' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Start
+        run: echo "ok"
+  
       - name: if needs.setop.outputs.build_doc
         if: ${{ needs.setop.outputs.build_doc == 'true' }}
         run: echo "run"
