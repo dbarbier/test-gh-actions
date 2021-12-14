@@ -48,7 +48,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: if build_doc in step
+      - name: if needs.debug.needs.setop.outputs.build_doc
+        if: ${{ needs.debug.needs.setop.outputs.build_doc == 'true' }}
+        run: echo "run"
+
+      - name: if needs.setop.outputs.build_doc
         if: ${{ needs.setop.outputs.build_doc == 'true' }}
         run: echo "run"
 
@@ -61,6 +65,10 @@ jobs:
       - name: Start
         run: echo "ok"
   
-      - name: Conditional step
+      - name: if needs.debug.needs.setop.outputs.build_doc
         if: ${{ needs.debug.needs.setop.outputs.build_doc == 'true' }}
+        run: echo "run"
+
+      - name: if needs.setop.outputs.build_doc
+        if: ${{ needs.setop.outputs.build_doc == 'true' }}
         run: echo "run"
