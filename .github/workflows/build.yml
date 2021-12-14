@@ -59,3 +59,20 @@ jobs:
       - name: Checkout source code
         if: ${{ needs.setup.outputs.build_doc == 'true' }}
         run: echo "3.8"
+
+  test-if:
+    needs: [debug]
+    if: ${{ needs.setup.build_doc == 'true' }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.8"]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: start
+        run: echo "ok"
+  
+      - name: Conditional step
+        if: ${{ needs.setup.outputs.build_doc == 'true' }}
+        run: echo "3.8"
