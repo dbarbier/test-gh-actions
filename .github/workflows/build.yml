@@ -25,7 +25,7 @@ jobs:
           print(f"::set-output name=python_version::{python_version}")
           print(f"::set-output name=build::{build}")
           print(f"::set-output name=test::{test}")
-          print(f"::set-output name=build_doc::true")
+          print(f"::set-output name=build_doc::false")
 
   debug:
     needs: [setop]
