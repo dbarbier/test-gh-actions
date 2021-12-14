@@ -44,7 +44,7 @@ jobs:
         run: echo "run"
 
   test-setop:
-    needs: [setop, debug]
+    needs: [debug]
     runs-on: ubuntu-latest
 
     steps:
