@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup:
+  setop:
     runs-on: ubuntu-latest
     outputs:
       python_version: ${{ steps.generate-matrix.outputs.python_version }}
@@ -28,11 +28,11 @@ jobs:
           print(f"::set-output name=build_doc::true")
 
   debug:
-    needs: [setup]
+    needs: [setop]
     strategy:
       matrix:
         os: ["macos-10.15", "macos-11"]
-        python-version: ${{ fromJSON(needs.setup.outputs.python_version) }}
+        python-version: ${{ fromJSON(needs.setop.outputs.python_version) }}
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
@@ -49,12 +49,12 @@ jobs:
 
     steps:
       - name: if build_doc in step
-        if: ${{ needs.setup.outputs.build_doc == 'true' }}
+        if: ${{ needs.setop.outputs.build_doc == 'true' }}
         run: echo "run"
 
   job-if:
     needs: [debug]
-    if: ${{ needs.setup.build_doc == 'true' }}
+    if: ${{ needs.setop.build_doc == 'true' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -62,5 +62,5 @@ jobs:
         run: echo "ok"
   
       - name: Conditional step
-        if: ${{ needs.setup.outputs.build_doc == 'true' }}
+        if: ${{ needs.setop.outputs.build_doc == 'true' }}
         run: echo "run"
