@@ -38,7 +38,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: pip debug
-        run: pip debug -v
+        run: |
+          pip debug -v
+          python -m pip install -U pip
+          pip debug -v
 
 
   build:
