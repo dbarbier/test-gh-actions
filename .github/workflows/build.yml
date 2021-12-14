@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       python_version: ${{ steps.generate-matrix.outputs.python_version }}
+      build_doc: ${{ steps.generate-matrix.outputs.build_doc}}
       build: ${{ steps.generate-matrix.outputs.build}}
       test: ${{ steps.generate-matrix.outputs.test}}
     steps:
@@ -24,6 +25,7 @@ jobs:
           print(f"::set-output name=python_version::{python_version}")
           print(f"::set-output name=build::{build}")
           print(f"::set-output name=test::{test}")
+          print(f"::set-output name=build_doc::true")
 
   debug:
     needs: [setup]
@@ -40,76 +42,20 @@ jobs:
       - name: pip debug
         run: |
           pip debug -v
-          python -m pip install -U pip
-          pip debug -v
 
-
-  build:
-    needs: [setup]
+  test:
+    needs: [debug]
     strategy:
-      fail-fast: false
       matrix:
-        os: [windows-latest]
+        os: [ubuntu-latest]
+        python-version: ["3.8"]
     runs-on: ${{ matrix.os }}
-    env:
-      VCPKG_DISABLE_METRICS: 1
-      VCPKG_DEPS_JSON: .github/vcpkg.json
 
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
-
-      - name: Setup vcpkg
-        id: vcpkg-root
-        shell: bash
-        run: |
-          cd $VCPKG_INSTALLATION_ROOT
-          ./vcpkg --version > $GITHUB_WORKSPACE/vcpkg-version.txt
-          echo "::set-output name=path::$(echo -E "$VCPKG_INSTALLATION_ROOT" | sed -e 's,\\,/,g')"
-
-      - name: Cache vcpkg
-        uses: actions/cache@v2
-        id: cache-vcpkg
+      - uses: actions/setup-python@v2
         with:
-          path: ${{ steps.vcpkg-root.outputs.path }}/installed
-          key: vcpkg-${{ runner.os }}-x64-${{ hashFiles('vcpkg-version.txt') }}-${{ hashFiles(env.VCPKG_DEPS_JSON) }}
-          restore-keys: |
-            vcpkg-${{ runner.os }}-x64-${{ hashFiles('vcpkg-version.txt') }}-
-            vcpkg-${{ runner.os }}-x64-
+          python-version: ${{ matrix.python-version }}
 
-      - name: Download MS-MPI
-        # The msmpi port in vcpkg is only a wrapper, it requires that msmpi be already installed
-        #
-        # URLs copied from https://github.com/microsoft/vcpkg/blob/master/ports/msmpi/portfile.cmake
-        shell: powershell
-        run: |
-          $client = new-object System.Net.WebClient
-          $client.DownloadFile("https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisetup.exe", "msmpisetup.exe")
-          $client.DownloadFile("https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisdk.msi", "msmpisdk.msi")
-
-      - name: Install MS-MPI
-        shell: cmd
-        run: |
-          msmpisetup.exe -unattend
-          msmpisdk.msi /passive
-
-      - name: Install vcpkg packages
-        if: steps.cache-vcpkg.outputs.cache-hit != 'true'
-        shell: bash
-        run: |
-          $VCPKG_INSTALLATION_ROOT/vcpkg install --debug --triplet x64-windows $(jq -j '.dependencies[] | ., " "' $VCPKG_DEPS_JSON)
-
-      - name: Configure CMake
-        run: >
-          cmake
-          -B build
-          -S .
-          -DCMAKE_SYSTEM_PREFIX_PATH:PATH=${{ steps.vcpkg-root.outputs.path }}/installed/x64-windows
-          -DCMAKE_BUILD_TYPE:STRING=Release
-
-      - name: Build
-        run: cmake --build build --config Release
-
-      - name: Test
-        working-directory: build
-        run: ctest -C Release
+      - name: Checkout source code
+        if: ${{ needs.setup.outputs.build_doc == 'true' }}
+        run: echo "3.8"
