@@ -45,34 +45,22 @@ jobs:
 
   test:
     needs: [debug]
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.8"]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Checkout source code
+      - name: if build_doc in step
         if: ${{ needs.setup.outputs.build_doc == 'true' }}
-        run: echo "3.8"
+        run: echo "run"
 
-  test-if:
+  job-if:
     needs: [debug]
     if: ${{ needs.setup.build_doc == 'true' }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.8"]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
-      - name: start
+      - name: Start
         run: echo "ok"
   
       - name: Conditional step
         if: ${{ needs.setup.outputs.build_doc == 'true' }}
-        run: echo "3.8"
+        run: echo "run"
