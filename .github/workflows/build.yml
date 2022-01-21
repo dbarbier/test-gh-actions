@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     env:
       VCPKG_DISABLE_METRICS: 1
@@ -21,6 +21,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup vcpkg
+        if: matrix.os == 'windows-latest'
         id: vcpkg-root
         shell: bash
         run: |
@@ -30,6 +31,7 @@ jobs:
 
       - name: Cache vcpkg
         uses: actions/cache@v2
+        if: matrix.os == 'windows-latest'
         id: cache-vcpkg
         with:
           path: ${{ steps.vcpkg-root.outputs.path }}/installed
@@ -39,6 +41,7 @@ jobs:
             vcpkg-${{ runner.os }}-x64-
 
       - name: Download MS-MPI
+        if: matrix.os == 'windows-latest'
         # The msmpi port in vcpkg is only a wrapper, it requires that msmpi be already installed
         #
         # URLs copied from https://github.com/microsoft/vcpkg/blob/master/ports/msmpi/portfile.cmake
@@ -49,13 +52,22 @@ jobs:
           $client.DownloadFile("https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisdk.msi", "msmpisdk.msi")
 
       - name: Install MS-MPI
+        if: matrix.os == 'windows-latest'
         shell: cmd
         run: |
           msmpisetup.exe -unattend
           msmpisdk.msi /passive
 
+      - name: Install OpenMPI (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt install -y libopenmpi-dev
+
+      - name: Install OpenMPI (MacOS)
+        if: matrix.os == 'macos-latest'
+        run: brew install open-mpi
+
       - name: Install vcpkg packages
-        if: steps.cache-vcpkg.outputs.cache-hit != 'true'
+        if: matrix.os == 'windows-latest' && steps.cache-vcpkg.outputs.cache-hit != 'true'
         shell: bash
         run: |
           $VCPKG_INSTALLATION_ROOT/vcpkg install --debug --triplet x64-windows $(jq -j '.dependencies[] | ., " "' $VCPKG_DEPS_JSON)
