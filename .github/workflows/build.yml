@@ -111,6 +111,7 @@ jobs:
           # FIXME: howto keep this list up-to-date?
           path: |
             /usr/local/Cellar/cairo
+            /usr/local/Cellar/doxygen
             /usr/local/Cellar/fribidi
             /usr/local/Cellar/gdk-pixbuf
             /usr/local/Cellar/gobject-introspection
@@ -131,7 +132,7 @@ jobs:
             /usr/local/Cellar/pango
             /usr/local/Cellar/pixman
             /usr/local/Cellar/xorgproto
-          key: ${{runner.os}}-graphviz-${{steps.mac-graphviz-version.outputs.version}}
+          key: ${{runner.os}}--doxygen-graphviz-${{steps.mac-graphviz-version.outputs.version}}
 
       - name: Install dependencies for documentation (MacOS, cache not hit)
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1 && steps.cache-graphviz.outputs.cache-hit != 'true'
@@ -147,7 +148,7 @@ jobs:
       - name: Install dependencies for documentation (MacOS, cache hit)
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1 && steps.cache-graphviz.outputs.cache-hit == 'true'
         run: |
-          /usr/local/opt/gdk-pixbuf/bin/gdk-pixbuf-query-loaders --update-cache
+          /usr/local/Cellar/gdk-pixbuf/bin/gdk-pixbuf-query-loaders --update-cache
 
       - name: Configure CMake
         run: cmake -S .  -B build -DENABLE_DOC=${{ matrix.cfg.doc }}
