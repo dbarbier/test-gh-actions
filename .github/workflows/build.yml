@@ -139,16 +139,10 @@ jobs:
         run: |
           brew install doxygen graphviz
 
-      - name: Debug MacOS
-        if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1
-        run: |
-          brew install doxygen
-          brew ls --verbose doxygen
-
       - name: Install dependencies for documentation (MacOS, cache hit)
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1 && steps.cache-graphviz.outputs.cache-hit == 'true'
         run: |
-          /usr/local/Cellar/gdk-pixbuf/bin/gdk-pixbuf-query-loaders --update-cache
+          /usr/local/Cellar/gdk-pixbuf/*/bin/gdk-pixbuf-query-loaders --update-ca
 
       - name: Configure CMake
         run: cmake -S .  -B build -DENABLE_DOC=${{ matrix.cfg.doc }}
