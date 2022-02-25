@@ -92,6 +92,10 @@ jobs:
         shell: pwsh
         run: |
           choco install -y --no-progress -debug -verbose doxygen.install ghostscript graphviz.portable
+          choco list doxygen.install
+          choco list doxygen.install --limit-output
+          $v = (choco list doxygen.install --limit-output)
+          Write-Output "name=version::$v"
           Get-Content C:\ProgramData\chocolatey\logs\chocolatey.log
           # Update PATH
           echo "C:/Program Files/doxygen/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
