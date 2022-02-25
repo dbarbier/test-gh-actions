@@ -95,6 +95,13 @@ jobs:
           # Update PATH
           echo "C:/Program Files/doxygen/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
+      - name: Check dependencies (MacOS)
+        if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1
+        shell: bash -x {0}
+        run: |
+          brew install doxygen
+          brew install graphviz
+
       - name: Query graphviz version (MacOS)
         id: mac-graphviz-version
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1
