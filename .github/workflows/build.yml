@@ -49,9 +49,9 @@ jobs:
       fail-fast: false
       matrix:
         cfg:
-          - { os: macos-latest, name: MacOS, doc: 0 }
-          - { os: ubuntu-latest, name: Ubuntu, doc: 0 }
-          - { os: windows-latest, name: Windows, doc: 0 }
+          - { os: macos-latest, name: MacOS, doc: 1 }
+          - { os: ubuntu-latest, name: Ubuntu, doc: 1 }
+          - { os: windows-latest, name: Windows, doc: 1 }
     runs-on: ${{ matrix.cfg.os }}
 
     steps:

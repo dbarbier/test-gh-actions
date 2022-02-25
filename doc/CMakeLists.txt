@@ -8,6 +8,8 @@ project(foo_doc NONE)
 
 include(UseLATEX.cmake)
 
+find_package(Doxygen)
+
 file(GLOB_RECURSE tex_files
      RELATIVE ${PROJECT_SOURCE_DIR}
      *.tex)
