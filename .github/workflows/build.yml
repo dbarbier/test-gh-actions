@@ -91,12 +91,11 @@ jobs:
         if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
         shell: pwsh
         run: |
-          choco install -y --no-progress -debug -verbose doxygen.install ghostscript graphviz.portable
-          choco list doxygen.install
+          choco install -y --no-progress doxygen.install ghostscript graphviz.portable
           choco list doxygen.install --limit-output
           $v = (choco list doxygen.install --limit-output)
           Write-Output "name=version::$v"
-          Get-Content C:\ProgramData\chocolatey\logs\chocolatey.log
+          Write-Output "name=version2::(choco list doxygen.install --limit-output)"
           # Update PATH
           echo "C:/Program Files/doxygen/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           echo "C:/ProgramData/chocolatey/lib/ghostscript.app/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
