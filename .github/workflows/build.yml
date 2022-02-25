@@ -142,7 +142,8 @@ jobs:
       - name: Install dependencies for documentation (MacOS, cache hit)
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1 && steps.cache-graphviz.outputs.cache-hit == 'true'
         run: |
-          /usr/local/Cellar/gdk-pixbuf/*/bin/gdk-pixbuf-query-loaders --update-ca
+          brew link cairo doxygen fribidi gdk-pixbuf gobject-introspection graphite2 gts harfbuzz jasper libpthread-stubs librsvg libx11 libxau libxcb libxdmcp libxext libxrender lzo netpbm pango pixman xorgproto
+          gdk-pixbuf-query-loaders --update-ca
 
       - name: Configure CMake
         run: cmake -S .  -B build -DENABLE_DOC=${{ matrix.cfg.doc }}
