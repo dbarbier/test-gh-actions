@@ -91,10 +91,12 @@ jobs:
         if: startsWith(matrix.cfg.os, 'windows') && matrix.cfg.doc == 1
         shell: pwsh
         run: |
-          choco install -y --no-progress -debug -verbose graphviz.portable
+          choco install -y --no-progress -debug -verbose doxygen ghostscript graphviz.portable
           Get-Content C:\ProgramData\chocolatey\logs\chocolatey.log
           # Update PATH
           echo "C:/Program Files/doxygen/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "C:/ProgramData/chocolatey/lib/doxygen/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "C:/ProgramData/chocolatey/lib/graphviz.portable/tools/release/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Check dependencies (MacOS)
         if: startsWith(matrix.cfg.os, 'macos') && matrix.cfg.doc == 1
