@@ -1,6 +1,6 @@
 #include <iostream>
 #include <HYPRE_config.h>
-
+#include <mpi.h>
 
 int main(int argc, char* argv[])
 {

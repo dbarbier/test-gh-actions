@@ -60,6 +60,10 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v2
 
+      - name: Install dependencies
+        run: |
+          brew install open-mpi
+
       - name: Install Eigen3 (cache hit)
         id: cache-Eigen3
         uses: actions/cache@v2
