@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  key_Eigen: src-Eigen3-3.4.0
+  key_Eigen: src-eigen3-3.4.0
 
 jobs:
   build-linux:
@@ -26,7 +26,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            build/_deps/Eigen3-src
+            build/_deps/eigen3-src
           # Source packages can be shared by different OS
           key: ${{ env.key_Eigen }}
 
@@ -69,7 +69,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            build/_deps/Eigen3-src
+            build/_deps/eigen3-src
           # Source packages can be shared by different OS
           key: ${{ env.key_Eigen }}
 
@@ -151,7 +151,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            build/_deps/Eigen3-src
+            build/_deps/eigen3-src
           # Source packages can be shared by different OS
           key: ${{ env.key_Eigen }}
 
