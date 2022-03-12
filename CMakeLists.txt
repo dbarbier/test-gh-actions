@@ -20,11 +20,14 @@ if(NOT Eigen3_FOUND)
 		GIT_SHALLOW ON
 	)
 
-	set(EIGEN_BUILD_DOC OFF CACHE BOOL "" FORCE)
-	set(EIGEN_BUILD_PKGCONFIG OFF CACHE BOOL "" FORCE)
-	set(EIGEN_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+	set(EIGEN_BUILD_PKGCONFIG OFF CACHE INTERNAL "")
+	set(EIGEN_BUILD_DOC OFF CACHE INTERNAL "")
+	# EIGEN_BUILD_TESTING will be used in 3.4.1
+	set(save_BUILD_TESTING ${BUILD_TESTING})
+	set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
 
 	FetchContent_MakeAvailable(Eigen3)
+	set(BUILD_TESTING ${save_BUILD_TESTING} CACHE BOOL "Build the testing tree." FORCE)
 	if(NOT TARGET Eigen3::Eigen)
 		add_library(Eigen3::Eigen ALIAS eigen)
 	endif(NOT TARGET Eigen3::Eigen)
@@ -57,7 +60,7 @@ if (NOT HYPRE_FOUND)
 				PATCH_COMMAND COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/FakeCMakeLists.txt CMakeLists.txt)
 		endif (CMAKE_VERSION VERSION_GREATER 3.18)
 
-		set(HYPRE_ENABLE_BIGINT ON CACHE BOOL "" FORCE)
+		set(HYPRE_ENABLE_BIGINT ON CACHE INTERNAL "")
 		set(hypre_is_bigint TRUE)
 
 		FetchContent_MakeAvailable(hyprepackage)
