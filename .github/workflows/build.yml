@@ -37,7 +37,7 @@ jobs:
           path: |
             build/_deps/hyprepackage-src
           # Source packages can be shared by different OS
-          key: src-hypre-0.22
+          key: src-hypre-2.23.0
 
       - name: Configure CMake
         run: >
@@ -76,7 +76,7 @@ jobs:
           path: |
             build/_deps/hyprepackage-src
           # Source packages can be shared by different OS
-          key: src-hypre-0.22
+          key: src-hypre-2.23.0
 
       - name: Configure CMake
         run: >
@@ -158,7 +158,7 @@ jobs:
           path: |
             build/_deps/hyprepackage-src
           # Source packages can be shared by different OS
-          key: src-hypre-0.22
+          key: src-hypre-2.23.0
 
       - name: Configure CMake
         run: >

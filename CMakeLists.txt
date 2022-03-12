@@ -17,12 +17,17 @@ if(NOT Eigen3_FOUND)
 		Eigen3
 		GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git/
 		GIT_TAG 3.4.0
+		GIT_SHALLOW ON
 	)
+
+	set(EIGEN_BUILD_DOC OFF CACHE BOOL "" FORCE)
+	set(EIGEN_BUILD_PKGCONFIG OFF CACHE BOOL "" FORCE)
+	set(EIGEN_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 
 	FetchContent_MakeAvailable(Eigen3)
 	if(NOT TARGET Eigen3::Eigen)
 		add_library(Eigen3::Eigen ALIAS eigen)
-	endif(NOT TARGET Eigen3::eigen)
+	endif(NOT TARGET Eigen3::Eigen)
 endif(NOT Eigen3_FOUND)
 
 # First look for HYPREConfig
@@ -40,6 +45,7 @@ if (NOT HYPRE_FOUND)
 				hyprepackage
 				GIT_REPOSITORY https://github.com/hypre-space/hypre
 				GIT_TAG v2.23.0
+				GIT_SHALLOW ON
 				SOURCE_SUBDIR src)
 		else (CMAKE_VERSION VERSION_GREATER 3.18)
 			file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/FakeCMakeLists.txt "add_subdirectory(src)")
@@ -47,6 +53,7 @@ if (NOT HYPRE_FOUND)
 				hyprepackage
 				GIT_REPOSITORY https://github.com/hypre-space/hypre
 				GIT_TAG v2.23.0
+				GIT_SHALLOW ON
 				PATCH_COMMAND COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/FakeCMakeLists.txt CMakeLists.txt)
 		endif (CMAKE_VERSION VERSION_GREATER 3.18)
 
