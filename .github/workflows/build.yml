@@ -5,13 +5,95 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  key_Eigen: src-Eigen3-3.4.0
+
 jobs:
-  build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y libopenmpi-dev
+
+      - name: Install Eigen3 (cache hit)
+        id: cache-Eigen3
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/_deps/Eigen3-src
+          # Source packages can be shared by different OS
+          key: ${{ env.key_Eigen }}
+
+      - name: Install HYPRE (cache hit)
+        id: cache-hypre
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/_deps/hyprepackage-src
+          # Source packages can be shared by different OS
+          key: src-hypre-0.22
+
+      - name: Configure CMake
+        run: >
+          cmake
+          -B build
+          -S .
+          -DCMAKE_BUILD_TYPE:STRING=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Test
+        working-directory: build
+        run: ctest -C Release
+
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Install Eigen3 (cache hit)
+        id: cache-Eigen3
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/_deps/Eigen3-src
+          # Source packages can be shared by different OS
+          key: ${{ env.key_Eigen }}
+
+      - name: Install HYPRE (cache hit)
+        id: cache-hypre
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/_deps/hyprepackage-src
+          # Source packages can be shared by different OS
+          key: src-hypre-0.22
+
+      - name: Configure CMake
+        run: >
+          cmake
+          -B build
+          -S .
+          -DCMAKE_BUILD_TYPE:STRING=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Test
+        working-directory: build
+        run: ctest -C Release
+
+  build-windows:
+    runs-on: windows-latest
     env:
       VCPKG_DISABLE_METRICS: 1
       VCPKG_DEPS_JSON: .github/vcpkg.json
@@ -67,7 +149,7 @@ jobs:
           path: |
             build/_deps/Eigen3-src
           # Source packages can be shared by different OS
-          key: src-Eigen3-3.4.0
+          key: ${{ env.key_Eigen }}
 
       - name: Install HYPRE (cache hit)
         id: cache-hypre
