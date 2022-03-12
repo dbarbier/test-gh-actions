@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     env:
       VCPKG_DISABLE_METRICS: 1
@@ -59,6 +59,24 @@ jobs:
         shell: bash
         run: |
           $VCPKG_INSTALLATION_ROOT/vcpkg install --debug --triplet x64-windows $(jq -j '.dependencies[] | ., " "' $VCPKG_DEPS_JSON)
+
+      - name: Install Eigen3 (cache hit)
+        id: cache-Eigen3
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/_deps/Eigen3-src
+          # Source packages can be shared by different OS
+          key: src-Eigen3-3.4.0
+
+      - name: Install HYPRE (cache hit)
+        id: cache-hypre
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/_deps/hyprepackage-src
+          # Source packages can be shared by different OS
+          key: src-hypre-0.22
 
       - name: Configure CMake
         run: >

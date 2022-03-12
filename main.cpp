@@ -1,11 +1,12 @@
 #include <iostream>
-#include <mpi.h>
+#include <HYPRE_config.h>
 
-#include "f.hpp"
 
 int main(int argc, char* argv[])
 {
   MPI_Init(&argc, &argv);
-  f();
+#ifndef HYPRE_BIGINT
+# error "HYPRE_BIGINT not defined"
+#endif
   MPI_Finalize();
 }
