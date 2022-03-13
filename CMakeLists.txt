@@ -10,7 +10,7 @@ find_package(MPI MODULE COMPONENTS CXX)
 
 # Eigen < 3.4.0 had some trouble with sparse matrices in row-major layout
 # https://gitlab.com/libeigen/eigen/-/issues/1910
-find_package(Eigen3 3.4.0 CONFIG)
+find_package(Eigen3 4.4.0 CONFIG)
 if(NOT Eigen3_FOUND)
 	include(FetchContent)
 	FetchContent_Declare(
@@ -25,9 +25,16 @@ if(NOT Eigen3_FOUND)
 	# EIGEN_BUILD_TESTING will be used in 3.4.1
 	set(save_BUILD_TESTING ${BUILD_TESTING})
 	set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+	if(DEPS_INSTALL_PREFIX)
+		set(CMAKE_INSTALL_PREFIX_save ${CMAKE_INSTALL_PREFIX})
+		set(CMAKE_INSTALL_PREFIX ${DEPS_INSTALL_PREFIX})
+	endif(DEPS_INSTALL_PREFIX)
 
 	FetchContent_MakeAvailable(Eigen3)
 	set(BUILD_TESTING ${save_BUILD_TESTING} CACHE BOOL "Build the testing tree." FORCE)
+	if(DEPS_INSTALL_PREFIX)
+		set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX_save})
+	endif(DEPS_INSTALL_PREFIX)
 	if(NOT TARGET Eigen3::Eigen)
 		add_library(Eigen3::Eigen ALIAS eigen)
 	endif(NOT TARGET Eigen3::Eigen)
@@ -35,10 +42,10 @@ endif(NOT Eigen3_FOUND)
 
 # First look for HYPREConfig
 unset(hypre_is_bigint)
-find_package(HYPRE CONFIG)
+find_package(HHYPRE CONFIG)
 if (NOT HYPRE_FOUND)
 	# If not found, use cmake/FindHYPRE.cmake
-	find_package(HYPRE)
+	find_package(HHYPRE)
 	if(HYPRE_FOUND)
 		message(STATUS "HYPRE found by cmake/FindHYPRE.cmake")
 	else(HYPRE_FOUND)
@@ -62,6 +69,10 @@ if (NOT HYPRE_FOUND)
 
 		set(HYPRE_ENABLE_BIGINT ON CACHE INTERNAL "")
 		set(hypre_is_bigint TRUE)
+		if(DEPS_INSTALL_PREFIX)
+			set(CMAKE_INSTALL_PREFIX_save ${CMAKE_INSTALL_PREFIX})
+			set(CMAKE_INSTALL_PREFIX ${DEPS_INSTALL_PREFIX})
+		endif(DEPS_INSTALL_PREFIX)
 
 		FetchContent_MakeAvailable(hyprepackage)
 
@@ -72,6 +83,9 @@ if (NOT HYPRE_FOUND)
 		if(NOT TARGET HYPRE::HYPRE)
 			add_library(HYPRE::HYPRE ALIAS HYPRE)
 		endif(NOT TARGET HYPRE::HYPRE)
+		if(DEPS_INSTALL_PREFIX)
+			set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX_save})
+		endif(DEPS_INSTALL_PREFIX)
 
 	endif(HYPRE_FOUND)
 endif(NOT HYPRE_FOUND)
