@@ -21,8 +21,8 @@ jobs:
           sudo apt update
           sudo apt install -y libopenmpi-dev
 
-      - name: Install Eigen3 (cache hit)
-        id: cache-Eigen3
+      - name: Install Eigen3 src (cache hit)
+        id: cache-Eigen3-src
         uses: actions/cache@v2
         with:
           path: |
@@ -30,14 +30,33 @@ jobs:
           # Source packages can be shared by different OS
           key: ${{ env.key_Eigen }}
 
-      - name: Install HYPRE (cache hit)
-        id: cache-hypre
+      - name: Install Eigen3 (cache hit)
+        id: cache-Eigen3
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/_deps/eigen3-build
+            build/_deps/eigen3-subbuild
+          # Source packages can be shared by different OS
+          key: ${{ runner.os }}-eigen3-3.4.0
+
+      - name: Install HYPRE src (cache hit)
+        id: cache-hypre-src
         uses: actions/cache@v2
         with:
           path: |
             build/_deps/hyprepackage-src
           # Source packages can be shared by different OS
           key: src-hypre-2.23.0
+
+      - name: Install HYPRE (cache hit)
+        id: cache-hypre-bin
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/_deps/hyprepackage-build
+            build/_deps/hyprepackage-subbuild
+          key: ${{ runner.os }}-hypre-2.23.0
 
       - name: Configure CMake
         run: >
@@ -64,8 +83,8 @@ jobs:
         run: |
           brew install open-mpi
 
-      - name: Install Eigen3 (cache hit)
-        id: cache-Eigen3
+      - name: Install Eigen3 src (cache hit)
+        id: cache-Eigen3-src
         uses: actions/cache@v2
         with:
           path: |
@@ -73,14 +92,33 @@ jobs:
           # Source packages can be shared by different OS
           key: ${{ env.key_Eigen }}
 
-      - name: Install HYPRE (cache hit)
-        id: cache-hypre
+      - name: Install Eigen3 (cache hit)
+        id: cache-Eigen3
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/_deps/eigen3-build
+            build/_deps/eigen3-subbuild
+          # Source packages can be shared by different OS
+          key: ${{ runner.os }}-eigen3-3.4.0
+
+      - name: Install HYPRE src (cache hit)
+        id: cache-hypre-src
         uses: actions/cache@v2
         with:
           path: |
             build/_deps/hyprepackage-src
           # Source packages can be shared by different OS
           key: src-hypre-2.23.0
+
+      - name: Install HYPRE (cache hit)
+        id: cache-hypre-bin
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/_deps/hyprepackage-build
+            build/_deps/hyprepackage-subbuild
+          key: ${{ runner.os }}-hypre-2.23.0
 
       - name: Configure CMake
         run: >
@@ -146,8 +184,8 @@ jobs:
         run: |
           $VCPKG_INSTALLATION_ROOT/vcpkg install --debug --triplet x64-windows $(jq -j '.dependencies[] | ., " "' $VCPKG_DEPS_JSON)
 
-      - name: Install Eigen3 (cache hit)
-        id: cache-Eigen3
+      - name: Install Eigen3 src (cache hit)
+        id: cache-Eigen3-src
         uses: actions/cache@v2
         with:
           path: |
@@ -155,14 +193,33 @@ jobs:
           # Source packages can be shared by different OS
           key: ${{ env.key_Eigen }}
 
+      - name: Install Eigen3 (cache hit)
+        id: cache-Eigen3
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/_deps/eigen3-build
+            build/_deps/eigen3-subbuild
+          # Source packages can be shared by different OS
+          key: ${{ runner.os }}-eigen3-3.4.0
+
       - name: Install HYPRE (cache hit)
-        id: cache-hypre
+        id: cache-hypre-src
         uses: actions/cache@v2
         with:
           path: |
             build/_deps/hyprepackage-src
           # Source packages can be shared by different OS
           key: src-hypre-2.23.0
+
+      - name: Install HYPRE (cache hit)
+        id: cache-hypre-bin
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/_deps/hyprepackage-build
+            build/_deps/hyprepackage-subbuild
+          key: ${{ runner.os }}-hypre-2.23.0
 
       - name: Configure CMake
         run: >
