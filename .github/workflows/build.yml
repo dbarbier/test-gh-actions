@@ -66,7 +66,7 @@ jobs:
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DEigen3_DIR=$GITHUB_WORKSPACE/build/_deps/eigen3-build
           -DHYPRE_DIR=$GITHUB_WORKSPACE/build/_deps/hyprepackage-build
-          -DDEPS_INSTALL_DIR=$GITHUB_WORKSPACE/deps
+          -DDEPS_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
 
       - name: Build
         run: cmake --build build --config Release
@@ -134,7 +134,7 @@ jobs:
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DEigen3_DIR=$GITHUB_WORKSPACE/build/_deps/eigen3-build
           -DHYPRE_DIR=$GITHUB_WORKSPACE/build/_deps/hyprepackage-build
-          -DDEPS_INSTALL_DIR=$GITHUB_WORKSPACE/deps
+          -DDEPS_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
 
       - name: Build
         run: cmake --build build --config Release
@@ -243,7 +243,7 @@ jobs:
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DEigen3_DIR=$GITHUB_WORKSPACE/build/_deps/eigen3-build
           -DHYPRE_DIR=$GITHUB_WORKSPACE/build/_deps/hyprepackage-build
-          -DDEPS_INSTALL_DIR=$GITHUB_WORKSPACE/deps
+          -DDEPS_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
 
       - name: Build
         run: cmake --build build --config Release
