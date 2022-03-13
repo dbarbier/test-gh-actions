@@ -75,6 +75,9 @@ jobs:
         working-directory: build
         run: ctest -C Release
 
+      - name: Install
+        run: cmake --install build --config Release
+
   build-macos:
     runs-on: macos-latest
 
@@ -139,6 +142,9 @@ jobs:
       - name: Test
         working-directory: build
         run: ctest -C Release
+
+      - name: Install
+        run: cmake --install build --config Release
 
   build-windows:
     runs-on: windows-latest
@@ -245,3 +251,6 @@ jobs:
       - name: Test
         working-directory: build
         run: ctest -C Release
+
+      - name: Install
+        run: cmake --install build --config Release
