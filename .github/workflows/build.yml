@@ -226,6 +226,7 @@ jobs:
           cmake
           -B build
           -S .
+          -DCMAKE_Fortran_COMPILER=false
           -DCMAKE_SYSTEM_PREFIX_PATH:PATH=${{ steps.vcpkg-root.outputs.path }}/installed/x64-windows
           -DCMAKE_BUILD_TYPE:STRING=Release
 
