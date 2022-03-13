@@ -64,6 +64,8 @@ jobs:
           -B build
           -S .
           -DCMAKE_BUILD_TYPE:STRING=Release
+          -DEigen3_DIR=$(pwd)/build/_deps/eigen3-build
+          -DHYPRE_DIR=$(pwd)/build/_deps/hyprepackage-build
 
       - name: Build
         run: cmake --build build --config Release
@@ -126,6 +128,8 @@ jobs:
           -B build
           -S .
           -DCMAKE_BUILD_TYPE:STRING=Release
+          -DEigen3_DIR=$(pwd)/build/_deps/eigen3-build
+          -DHYPRE_DIR=$(pwd)/build/_deps/hyprepackage-build
 
       - name: Build
         run: cmake --build build --config Release
@@ -229,6 +233,8 @@ jobs:
           -DCMAKE_Fortran_COMPILER=false
           -DCMAKE_SYSTEM_PREFIX_PATH:PATH=${{ steps.vcpkg-root.outputs.path }}/installed/x64-windows
           -DCMAKE_BUILD_TYPE:STRING=Release
+          -DEigen3_DIR=$(pwd)/build/_deps/eigen3-build
+          -DHYPRE_DIR=$(pwd)/build/_deps/hyprepackage-build
 
       - name: Build
         run: cmake --build build --config Release
