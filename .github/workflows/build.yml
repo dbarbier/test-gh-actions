@@ -38,7 +38,7 @@ jobs:
             build/_deps/eigen3-build
             build/_deps/eigen3-subbuild
           # Source packages can be shared by different OS
-          key: ${{ runner.os }}-eigen3-3.4.0
+          key: build-${{ runner.os }}-eigen3-3.4.0
 
       - name: Install HYPRE src (cache hit)
         id: cache-hypre-src
@@ -56,7 +56,7 @@ jobs:
           path: |
             build/_deps/hyprepackage-build
             build/_deps/hyprepackage-subbuild
-          key: ${{ runner.os }}-hypre-2.23.0
+          key: build-${{ runner.os }}-hypre-2.23.0
 
       - name: Configure CMake
         run: >
@@ -102,7 +102,7 @@ jobs:
             build/_deps/eigen3-build
             build/_deps/eigen3-subbuild
           # Source packages can be shared by different OS
-          key: ${{ runner.os }}-eigen3-3.4.0
+          key: build-${{ runner.os }}-eigen3-3.4.0
 
       - name: Install HYPRE src (cache hit)
         id: cache-hypre-src
@@ -120,7 +120,7 @@ jobs:
           path: |
             build/_deps/hyprepackage-build
             build/_deps/hyprepackage-subbuild
-          key: ${{ runner.os }}-hypre-2.23.0
+          key: build-${{ runner.os }}-hypre-2.23.0
 
       - name: Configure CMake
         run: >
@@ -205,7 +205,7 @@ jobs:
             build/_deps/eigen3-build
             build/_deps/eigen3-subbuild
           # Source packages can be shared by different OS
-          key: ${{ runner.os }}-eigen3-3.4.0
+          key: build-${{ runner.os }}-eigen3-3.4.0
 
       - name: Install HYPRE (cache hit)
         id: cache-hypre-src
@@ -223,7 +223,7 @@ jobs:
           path: |
             build/_deps/hyprepackage-build
             build/_deps/hyprepackage-subbuild
-          key: ${{ runner.os }}-hypre-2.23.0
+          key: build-${{ runner.os }}-hypre-2.23.0
 
       - name: Configure CMake
         run: >
