@@ -42,10 +42,10 @@ endif(NOT Eigen3_FOUND)
 
 # First look for HYPREConfig
 unset(hypre_is_bigint)
-find_package(HHYPRE CONFIG)
+find_package(HYPRE CONFIG)
 if (NOT HYPRE_FOUND)
 	# If not found, use cmake/FindHYPRE.cmake
-	find_package(HHYPRE)
+	find_package(HYPRE)
 	if(HYPRE_FOUND)
 		message(STATUS "HYPRE found by cmake/FindHYPRE.cmake")
 	else(HYPRE_FOUND)
