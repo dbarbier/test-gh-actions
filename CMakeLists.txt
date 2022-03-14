@@ -10,7 +10,7 @@ find_package(MPI MODULE COMPONENTS CXX)
 
 # Eigen < 3.4.0 had some trouble with sparse matrices in row-major layout
 # https://gitlab.com/libeigen/eigen/-/issues/1910
-find_package(Eigen3 4.4.0 CONFIG)
+find_package(Eigen3 3.4.0 CONFIG)
 if(NOT Eigen3_FOUND)
 	include(FetchContent)
 	FetchContent_Declare(
