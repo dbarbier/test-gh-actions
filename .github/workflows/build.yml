@@ -251,9 +251,3 @@ jobs:
       - name: Test
         working-directory: build
         run: ctest -C Release
-
-      - name: Debug cmake
-        if: failure()
-        shell: bash
-        run: |
-	  find build/_deps/hyprepackage-build -name CMake\*.log | xargs cat
