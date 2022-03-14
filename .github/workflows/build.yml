@@ -225,6 +225,12 @@ jobs:
             build/_deps/hyprepackage-subbuild
           key: build-${{ runner.os }}-hypre-2.23.0
 
+      - name: ls hypre
+        shell: bash
+        run: |
+          ls -lR build/_deps/hyprepackage-build
+          test -e build/_deps/hyprepackage-build/HYPRE_config.h && cat build/_deps/hyprepackage-build/HYPRE_config.h
+
       - name: Configure CMake
         run: >
           $ws = ${env:GITHUB_WORKSPACE} -replace '\\', '/'
