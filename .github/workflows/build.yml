@@ -228,7 +228,7 @@ jobs:
       - name: Configure CMake
         run: >
           $ws = ${env:GITHUB_WORKSPACE} -replace '\\', '/'
-          \n
+
           cmake
           -B build
           -S .
