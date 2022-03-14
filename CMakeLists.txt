@@ -72,7 +72,6 @@ if (NOT HYPRE_FOUND)
 		if(NOT TARGET HYPRE::HYPRE)
 			add_library(HYPRE::HYPRE ALIAS HYPRE)
 		endif(NOT TARGET HYPRE::HYPRE)
-
 	endif(HYPRE_FOUND)
 endif(NOT HYPRE_FOUND)
 if(NOT hypre_is_bigint)
