@@ -66,8 +66,6 @@ jobs:
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DEigen3_DIR=$GITHUB_WORKSPACE/build/_deps/eigen3-build
           -DHYPRE_DIR=$GITHUB_WORKSPACE/build/_deps/hyprepackage-build
-          -DDEPS_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
-          -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/install
 
       - name: Build
         run: cmake --build build --config Release
@@ -75,9 +73,6 @@ jobs:
       - name: Test
         working-directory: build
         run: ctest -C Release
-
-      - name: Install
-        run: cmake --install build --config Release
 
   build-macos:
     runs-on: macos-latest
@@ -135,8 +130,6 @@ jobs:
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DEigen3_DIR=$GITHUB_WORKSPACE/build/_deps/eigen3-build
           -DHYPRE_DIR=$GITHUB_WORKSPACE/build/_deps/hyprepackage-build
-          -DDEPS_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
-          -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/install
 
       - name: Build
         run: cmake --build build --config Release
@@ -144,9 +137,6 @@ jobs:
       - name: Test
         working-directory: build
         run: ctest -C Release
-
-      - name: Install
-        run: cmake --install build --config Release
 
   build-windows:
     runs-on: windows-latest
@@ -245,8 +235,6 @@ jobs:
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DEigen3_DIR=$GITHUB_WORKSPACE/build/_deps/eigen3-build
           -DHYPRE_DIR=$GITHUB_WORKSPACE/build/_deps/hyprepackage-build
-          -DDEPS_INSTALL_PREFIX=$GITHUB_WORKSPACE/deps
-          -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/install
 
       - name: Build
         run: cmake --build build --config Release
@@ -254,6 +242,3 @@ jobs:
       - name: Test
         working-directory: build
         run: ctest -C Release
-
-      - name: Install
-        run: cmake --install build --config Release
