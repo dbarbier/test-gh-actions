@@ -233,9 +233,9 @@ jobs:
           -DCMAKE_Fortran_COMPILER=false
           -DCMAKE_SYSTEM_PREFIX_PATH:PATH=${{ steps.vcpkg-root.outputs.path }}/installed/x64-windows
           -DCMAKE_BUILD_TYPE:STRING=Release
-          -DEigen3_DIR="${env:GITHUB_WORKSPACE}/build/_deps/eigen3-build"
-          -DHYPRE2_DIR="${env:GITHUB_WORKSPACE}/build/_deps/hyprepackage-build"
-          -DHYPRE_DIR=${{ github.workspace }}/build/_deps/hyprepackage-build
+          -DEigen3_DIR:PATH="${env:GITHUB_WORKSPACE}/build/_deps/eigen3-build"
+          -DHYPRE2_DIR:PATH="${env:GITHUB_WORKSPACE}/build/_deps/hyprepackage-build"
+          -DHYPRE_DIR:PATH=${{ github.workspace }}/build/_deps/hyprepackage-build
 
       - name: Build
         run: cmake --build build --config Release
