@@ -3,10 +3,18 @@
 
 #include "f.hpp"
 
-#ifdef SIZE_T_UNALIASED
-#warning "SIZE_T_UNALIASED is defined"
+#ifdef __GNUC__
+# ifdef SIZE_T_UNALIASED
+#  warning "SIZE_T_UNALIASED is defined"
+# else
+#  warning "SIZE_T_UNALIASED is not defined"
+# endif
 #else
-#warning "SIZE_T_UNALIASED is not defined"
+# ifdef SIZE_T_UNALIASED
+#  pragma message("SIZE_T_UNALIASED is defined")
+# else
+#  pragma message("SIZE_T_UNALIASED is not defined")
+# endif
 #endif
 
 
