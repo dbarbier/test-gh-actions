@@ -80,7 +80,7 @@ jobs:
           -B build
           -S .
           -DCMAKE_SYSTEM_PREFIX_PATH:PATH=${{ steps.vcpkg-root.outputs.path }}/installed/x64-windows
-          -DCMAKE_BUILD_TYPE:STRING=Release
+          -DCMAKE_TRY_COMPILE_CONFIGURATION:STRING=Release
 
       - name: Build
         run: cmake --build build --config Release
