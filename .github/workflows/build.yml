@@ -27,7 +27,9 @@ jobs:
         run: |
           cd $VCPKG_INSTALLATION_ROOT
           ./vcpkg --version > $GITHUB_WORKSPACE/vcpkg-version.txt
-          echo "::set-output name=path::$(echo -E "$VCPKG_INSTALLATION_ROOT" | sed -e 's,\\,/,g')"
+          echo "path=$(echo -E "$VCPKG_INSTALLATION_ROOT" | sed -e 's,\\,/,g')" >> $GITHUB_OUTPUT
+          # Add path to DLLs.  We may have to also add debug/bin if we build Debug libraries
+          echo -E "$VCPKG_INSTALLATION_ROOT\installed\x64-windows\bin" >> $GITHUB_PATH
 
       - name: Cache vcpkg
         uses: actions/cache@v2
