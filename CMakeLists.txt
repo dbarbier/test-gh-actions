@@ -21,4 +21,6 @@ add_test (
     COMMAND ${MPIEXEC_EXECUTABLE} -n 1 $<TARGET_FILE:main>
 )
 
+message(STATUS "CMAKE_SIZEOF_VOID_P = ${CMAKE_SIZEOF_VOID_P}")
+
 install(TARGETS main)
