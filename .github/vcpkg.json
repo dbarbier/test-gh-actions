@@ -3,7 +3,6 @@
   "version-string": "1",
   "dependencies": [
     "msmpi",
-    "nlohmann-json",
-    "vtk"
+    "nlohmann-json"
   ]
 }
