@@ -47,7 +47,7 @@ if (NOT HYPRE_FOUND)
 		include(FetchContent)
 		if (CMAKE_VERSION VERSION_GREATER 3.18)
 			FetchContent_Declare(
-				hyprepackage
+				HYPRE
 				GIT_REPOSITORY https://github.com/hypre-space/hypre
 				GIT_TAG v2.23.0
 				GIT_SHALLOW ON
@@ -65,10 +65,10 @@ if (NOT HYPRE_FOUND)
 		set(HYPRE_ENABLE_BIGINT ON CACHE INTERNAL "")
 		set(hypre_is_bigint TRUE)
 
-		FetchContent_MakeAvailable(hyprepackage)
+		FetchContent_MakeAvailable(HYPRE)
 
 		# https://github.com/hypre-space/hypre/issues/513
-		file(REMOVE ${FETCHCONTENT_BASE_DIR}/hyprepackage-src/src/utilities/version)
+		file(REMOVE ${FETCHCONTENT_BASE_DIR}/hypre-src/src/utilities/version)
 
 		# https://github.com/hypre-space/hypre/pull/563
 		if(NOT TARGET HYPRE::HYPRE)

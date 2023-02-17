@@ -45,7 +45,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            build/_deps/hyprepackage-src
+            build/_deps/hypre-src
           # Source packages can be shared by different OS
           key: src-hypre-2.23.0
 
@@ -54,8 +54,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            build/_deps/hyprepackage-build
-            build/_deps/hyprepackage-subbuild
+            build/_deps/hypre-build
+            build/_deps/hypre-subbuild
           key: build-${{ runner.os }}-hypre-2.23.0
 
       - name: Configure CMake
@@ -65,7 +65,7 @@ jobs:
           -S .
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DEigen3_DIR=$GITHUB_WORKSPACE/build/_deps/eigen3-build
-          -DHYPRE_DIR=$GITHUB_WORKSPACE/build/_deps/hyprepackage-build
+          -DHYPRE_DIR=$GITHUB_WORKSPACE/build/_deps/hypre-build
 
       - name: Build
         run: cmake --build build --config Release
@@ -109,7 +109,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            build/_deps/hyprepackage-src
+            build/_deps/hypre-src
           # Source packages can be shared by different OS
           key: src-hypre-2.23.0
 
@@ -118,8 +118,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            build/_deps/hyprepackage-build
-            build/_deps/hyprepackage-subbuild
+            build/_deps/hypre-build
+            build/_deps/hypre-subbuild
           key: build-${{ runner.os }}-hypre-2.23.0
 
       - name: Configure CMake
@@ -129,7 +129,7 @@ jobs:
           -S .
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DEigen3_DIR=$GITHUB_WORKSPACE/build/_deps/eigen3-build
-          -DHYPRE_DIR=$GITHUB_WORKSPACE/build/_deps/hyprepackage-build
+          -DHYPRE_DIR=$GITHUB_WORKSPACE/build/_deps/hypre-build
 
       - name: Build
         run: cmake --build build --config Release
@@ -196,6 +196,7 @@ jobs:
             build/_deps/eigen3-src
           # Source packages can be shared by different OS
           key: ${{ env.key_Eigen }}
+          enableCrossOsArchive: true
 
       - name: Install Eigen3 (cache hit)
         id: cache-Eigen3
@@ -212,7 +213,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            build/_deps/hyprepackage-src
+            build/_deps/hypre-src
           # Source packages can be shared by different OS
           key: src-hypre-2.23.0
           enableCrossOsArchive: true
@@ -222,15 +223,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            build/_deps/hyprepackage-build
-            build/_deps/hyprepackage-subbuild
+            build/_deps/hypre-build
+            build/_deps/hypre-subbuild
           key: build-${{ runner.os }}-hypre-2.23.0
-
-      - name: ls hypre
-        shell: bash
-        run: |
-          ls -lR build/_deps/hyprepackage-build
-          test -e build/_deps/hyprepackage-build/HYPRE_config.h && cat build/_deps/hyprepackage-build/HYPRE_config.h
 
       - name: Configure CMake
         run: >
@@ -244,7 +239,7 @@ jobs:
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DCMAKE_TRY_COMPILE_CONFIGURATION:STRING=Release
           -DEigen3_DIR:PATH="$ws/build/_deps/eigen3-build"
-          -DHYPRE_DIR:PATH="$ws/build/_deps/hyprepackage-build"
+          -DHYPRE_DIR:PATH="$ws/build/_deps/hypre-build"
 
       - name: Build
         run: cmake --build build --config Release
